@@ -3,106 +3,141 @@ import { Plus } from "lucide-react";
 import Projectboard from "../components/Projectboard";
 import Modal from "../components/ui/Modal";
 import { useState } from "react";
+import ColorPicker from "../components/ColorPicker";
+import type { ProjectProps } from "../types/types";
+
+const todoTasks = [
+  {
+    id: 1,
+    title: "Define Project Scope",
+    description:
+      "Outline the boundaries and objectives for the Q3 marketing campaign.",
+    date: "2025-06-23",
+    priority: "urgent",
+  },
+  {
+    id: 2,
+    title: "Research Competitors",
+    description: "Gather data on competitor strategies and market positioning.",
+    date: "2025-06-24",
+    priority: "Medium",
+  },
+  {
+    id: 3,
+    title: "Create Content Calendar",
+    description:
+      "Develop a detailed content schedule for social media and blog posts.",
+    date: "2025-06-25",
+    priority: "High",
+  },
+];
+
+const inprogressTasks = [
+  {
+    id: 4,
+    title: "Design UI Mockups",
+    description:
+      "Draft initial wireframes and high-fidelity mockups for the new feature.",
+    date: "2025-06-23",
+    priority: "Medium",
+  },
+  {
+    id: 5,
+    title: "Develop API Endpoints",
+    description: "Implement backend API for data retrieval and submission.",
+    date: "2025-06-24",
+    priority: "urgent",
+  },
+  {
+    id: 6,
+    title: "Write User Stories",
+    description:
+      "Document user journeys and requirements for upcoming sprints.",
+    date: "2025-06-24",
+    priority: "urgent",
+  },
+];
+
+const reviewTasks = [
+  {
+    id: 7,
+    title: "Peer Code Review",
+    description:
+      "Review new feature branch for quality and adherence to standards.",
+    date: "2025-06-20",
+    priority: "Low",
+  },
+  {
+    id: 8,
+    title: "Client Feedback Session",
+    description:
+      "Conduct a meeting to gather feedback on the latest prototype.",
+    date: "2025-06-20",
+    priority: "Low",
+  },
+];
+
+const completedTasks = [
+  {
+    id: 9,
+    title: "Project Kick-off Meeting",
+    description:
+      "Successfully initiated the new project with all stakeholders.",
+    date: "2025-06-29",
+    priority: "Low",
+  },
+  {
+    id: 10,
+    title: "Initial Market Research Report",
+    description: "Comprehensive report on initial market findings submitted.",
+    date: "2025-06-29",
+    priority: "Low",
+  },
+];
 
 const Mainboard: FC = () => {
-  const name = localStorage.getItem("userName");
-  const todoTasks = [
-    {
-      id: 1,
-      title: "Define Project Scope",
-      description:
-        "Outline the boundaries and objectives for the Q3 marketing campaign.",
-      date: "2025-06-23",
-      urgency: "urgent",
-    },
-    {
-      id: 2,
-      title: "Research Competitors",
-      description:
-        "Gather data on competitor strategies and market positioning.",
-      date: "2025-06-24",
-      urgency: "Medium",
-    },
-    {
-      id: 3,
-      title: "Create Content Calendar",
-      description:
-        "Develop a detailed content schedule for social media and blog posts.",
-      date: "2025-06-25",
-      urgency: "High",
-    },
-  ];
-
-  const inprogressTasks = [
-    {
-      id: 4,
-      title: "Design UI Mockups",
-      description:
-        "Draft initial wireframes and high-fidelity mockups for the new feature.",
-      date: "2025-06-23",
-      urgency: "Medium",
-    },
-    {
-      id: 5,
-      title: "Develop API Endpoints",
-      description: "Implement backend API for data retrieval and submission.",
-      date: "2025-06-24",
-      urgency: "urgent",
-    },
-    {
-      id: 6,
-      title: "Write User Stories",
-      description:
-        "Document user journeys and requirements for upcoming sprints.",
-      date: "2025-06-24",
-      urgency: "urgent",
-    },
-  ];
-
-  const reviewTasks = [
-    {
-      id: 7,
-      title: "Peer Code Review",
-      description:
-        "Review new feature branch for quality and adherence to standards.",
-      date: "2025-06-20",
-      urgency: "Low",
-    },
-    {
-      id: 8,
-      title: "Client Feedback Session",
-      description:
-        "Conduct a meeting to gather feedback on the latest prototype.",
-      date: "2025-06-20",
-      urgency: "Low",
-    },
-  ];
-
-  const completedTasks = [
-    {
-      id: 9,
-      title: "Project Kick-off Meeting",
-      description:
-        "Successfully initiated the new project with all stakeholders.",
-      date: "2025-06-29",
-      urgency: "Low",
-    },
-    {
-      id: 10,
-      title: "Initial Market Research Report",
-      description: "Comprehensive report on initial market findings submitted.",
-      date: "2025-06-29",
-      urgency: "Low",
-    },
-  ];
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [colors, setColors] = useState("");
+  const [boards, setBoards] = useState<ProjectProps[]>([
+    { projectTitle: "Todo", tasks: todoTasks, borderColors: "border-red-500" },
+    {
+      projectTitle: "In Progress",
+      tasks: inprogressTasks,
+      borderColors: "border-blue-500",
+    },
+    {
+      projectTitle: "Under Review",
+      tasks: reviewTasks,
+      borderColors: "border-pink-500",
+    },
+    {
+      projectTitle: "Completed",
+      tasks: completedTasks,
+      borderColors: "border-yellow-500",
+    },
+  ]);
+
+  const name = localStorage.getItem("userName");
 
   const openModalHandler = () => {
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("boardName");
+
+    if (typeof name === "string") {
+      setBoards((prev) => [
+        ...prev,
+        { projectTitle: name, tasks: [], borderColors: colors },
+      ]);
+    }
     setModalOpen(false);
   };
   return (
@@ -125,10 +160,14 @@ const Mainboard: FC = () => {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-12 px-4">
-          <Projectboard projectTitle="Todo" tasks={todoTasks} />
-          <Projectboard projectTitle="In Progress" tasks={inprogressTasks} />
-          <Projectboard projectTitle="Under Review" tasks={reviewTasks} />
-          <Projectboard projectTitle="Completed" tasks={completedTasks} />
+          {boards.map((board, index) => (
+            <Projectboard
+              key={index}
+              projectTitle={board.projectTitle}
+              tasks={board.tasks}
+              borderColors={board.borderColors}
+            />
+          ))}
         </div>
 
         <Modal
@@ -137,9 +176,9 @@ const Mainboard: FC = () => {
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           width="w-[480px]"
-          height="h-[340px]"
+          height="h-auto"
         >
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={submitHandler}>
             <div className="flex flex-col gap-2">
               <label className="text-white">Board Title</label>
               <input
@@ -147,7 +186,13 @@ const Mainboard: FC = () => {
                 required
                 placeholder="e.g Todo"
                 className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                name="boardName"
               />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-white">Board Color</label>
+              <ColorPicker setColor={setColors} />
             </div>
 
             <div className="flex justify-end gap-12 mt-8">
