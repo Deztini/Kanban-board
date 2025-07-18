@@ -12,6 +12,7 @@ import {
 } from "../utils/validation";
 
 const Signup: FC = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +43,7 @@ const Signup: FC = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:3000/auth/signup", {
+    const response = await fetch(`${apiUrl}/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),

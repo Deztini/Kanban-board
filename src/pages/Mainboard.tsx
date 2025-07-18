@@ -141,7 +141,7 @@ const Mainboard: FC = () => {
   } else {
     content = (
       <div className="flex justify-center">
-        <div className="bg-[#121212] flex flex-col justify-center items-center mt-12 px-12 py-8 h-[500px] w-[480px]">
+        <div className="bg-[#121212] flex flex-col justify-center items-center mt-12 px-12 py-8 h-[500px] w-[480px] rounded-3xl shadow-2xl ml">
           <img src={boardImg} alt="" className="w-[200px] h-[200px]" />
           <h1 className="text-white font-bold text-4xl mb-8 mt-4 text-center">
             No Boards Yet!

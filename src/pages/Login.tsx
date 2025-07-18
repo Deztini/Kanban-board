@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { isEmail, hasMinLength } from "../utils/validation";
 
 const Login: FC = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ const Login: FC = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:3000/auth/login", {
+    const response = await fetch(`${apiUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
