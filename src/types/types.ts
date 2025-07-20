@@ -4,10 +4,11 @@ export type taskProps = {
   description: string;
   date: string;
   priority: string;
+  boardId: string,
 };
 
 export type ProjectProps = {
   projectTitle: string;
-  tasks: taskProps[];
   borderColors: string;
+  boardId: string
 };

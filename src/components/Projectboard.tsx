@@ -1,16 +1,19 @@
-import { useState, type FC } from "react";
+import { useState, type FC, useContext } from "react";
 import Task from "./Task";
 import { Plus } from "lucide-react";
 import Modal from "./ui/Modal";
 import type { ProjectProps, taskProps } from "../types/types";
+import { TaskContext } from "../store/context/project-context";
 
-const Projectboard: FC<ProjectProps> = ({
+const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   projectTitle,
-  tasks: dummyTask,
   borderColors,
+  boardId,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [tasks, setTasks] = useState<taskProps[]>(dummyTask);
+  const taskCtx = useContext(TaskContext);
+  const boardTask = taskCtx.tasks.filter((task) => task.boardId === boardId);
+  // const [tasks, setTasks] = useState<taskProps[]>(dummyTask);
 
   const openModalHandler = () => {
     setModalOpen(true);
@@ -35,9 +38,10 @@ const Projectboard: FC<ProjectProps> = ({
       description,
       date,
       priority,
+      boardId,
     };
 
-    setTasks((prevTask) => [...prevTask, { ...newTask }]);
+    taskCtx.setTasks((prevTask) => [...prevTask, { ...newTask }]);
 
     setModalOpen(false);
   };
@@ -49,15 +53,9 @@ const Projectboard: FC<ProjectProps> = ({
       >
         <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
         <div className="flex flex-col gap-3">
-          {tasks.length > 0 ? (
-            tasks.map((t) => (
-              <Task
-                key={t.id}
-                title={t.title}
-                description={t.description}
-                date={t.date}
-                priority={t.priority}
-              />
+          {boardTask.length > 0 ? (
+            boardTask.map((t) => (
+              <Task key={t.id} id={t.id} boardId={t.boardId} />
             ))
           ) : (
             <div>

@@ -119,7 +119,7 @@ const Mainboard: FC = () => {
     if (typeof name === "string") {
       setBoards((prev) => [
         ...prev,
-        { projectTitle: name, tasks: [], borderColors: colors },
+        { projectTitle: name, borderColors: colors, boardId: name },
       ]);
     }
     setModalOpen(false);
@@ -132,7 +132,7 @@ const Mainboard: FC = () => {
           <Projectboard
             key={index}
             projectTitle={board.projectTitle}
-            tasks={board.tasks}
+            boardId={board.boardId}
             borderColors={board.borderColors}
           />
         ))}

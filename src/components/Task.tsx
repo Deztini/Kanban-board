@@ -1,21 +1,73 @@
 import type { FC } from "react";
 import type { taskProps } from "../types/types";
 import { Ellipsis, Pencil, Trash } from "lucide-react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import Modal from "./ui/Modal";
+import { TaskContext } from "../store/context/project-context";
 
-// type TaskProps = {
-//   title: string;
-//   description: string;
-//   date: string;
-//   priority: string;
-// };
 
-const Task: FC<taskProps> = ({ id, title, description, date, priority }) => {
+const Task: FC<taskProps> = ({ id, boardId }) => {
+  const taskCtx = useContext(TaskContext);
   const [isClicked, setIsClicked] = useState<boolean>();
+  const [edit, setEdit] = useState(false);
+
+  const latestTask = taskCtx.tasks.find((t) => t.id === id);
+  if (!latestTask) return null;
+
+  const { title, description, date, priority } = latestTask;
+
+  const [editTitle, setEditTitle] = useState(title);
+  const [editDescription, setEditDescription] = useState(description);
+  const [editPriority, setEditPriority] = useState(priority);
+  const [editDate, setEditDate] = useState(date);
 
   function toggleOverlay() {
     setIsClicked((prev) => !prev);
   }
+
+  function handleEdit() {
+    setEdit(true);
+  }
+
+  const handleCloseModal = () => {
+    setEdit(false);
+  };
+
+  useEffect(() => {
+    const editTask = taskCtx.tasks.find((task) => task.id === id);
+
+    if (editTask) {
+      setEditTitle(editTask.title);
+      setEditDescription(editTask.description);
+      setEditPriority(editTask.priority);
+      setEditDate(editTask.date);
+    }
+  }, [edit, id, taskCtx.tasks]);
+
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const updatedTask: taskProps = {
+      id,
+      title: editTitle,
+      description: editDescription,
+      date: editDate,
+      priority: editPriority,
+      boardId,
+    };
+
+    taskCtx.setTasks((prevTask) =>
+      prevTask.map((task) => (task.id === id ? updatedTask : task))
+    );
+
+    setEdit(false);
+    setIsClicked(false);
+  };
+
+  const handleDelete = (id: number) => {
+    taskCtx.setTasks((prevTask) => prevTask.filter((t) => t.id !== id));
+  };
+
   return (
     <>
       <div className="bg-black w-90 h-60 py-4 px-6 rounded-xl relative">
@@ -30,11 +82,17 @@ const Task: FC<taskProps> = ({ id, title, description, date, priority }) => {
           <p className="text-[#ccc] font-bold mb-6">{description}</p>
           {isClicked && (
             <div className="bg-[#121212] h-28 w-35 flex flex-col gap-1 z-10 absolute top-13 right-5 rounded-xl px-3 py-3">
-              <button className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl">
+              <button
+                className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+                onClick={handleEdit}
+              >
                 {" "}
                 <Pencil style={{ color: "#3B82F6" }} /> Edit
               </button>
-              <button className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl">
+              <button
+                className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+                onClick={handleDelete.bind(this, id)}
+              >
                 {" "}
                 <Trash style={{ color: "#EF4444" }} /> Delete
               </button>
@@ -51,6 +109,83 @@ const Task: FC<taskProps> = ({ id, title, description, date, priority }) => {
           </p>
         </div>
       </div>
+
+      <Modal
+        isOpen={edit}
+        onClose={() => setEdit(false)}
+        title="Edit Task"
+        subtitle="Modify the details of your task card."
+        width="w-[380px]"
+        height="h-auto"
+      >
+        <form className="flex flex-col gap-4" onSubmit={handleUpdate}>
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Task Title</label>
+            <input
+              type="text"
+              required
+              placeholder="e.g Implement user authentication"
+              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              name="title"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Description</label>
+            <textarea
+              placeholder="Add detailed notes, subtasks, or links related to this task..."
+              className="bg-black  rounded px-4 py-4 text-white"
+              name="description"
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Priority</label>
+            <select
+              className="bg-black h-[40px] text-white px-4 py-2"
+              value={editPriority}
+              name="priority"
+              onChange={(e) => setEditPriority(e.target.value)}
+            >
+              <option value="" disabled>
+                Select priority
+              </option>
+              <option value="low">low</option>
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Due Date</label>
+            <input
+              type="date"
+              required
+              name="date"
+              placeholder="Pick a date"
+              className=" bg-black h-[35px] rounded px-4 py-4 text-white "
+              value={editDate}
+              onChange={(e) => setEditDate(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-end gap-12 mt-8">
+            <button
+              onClick={handleCloseModal}
+              className="text-white cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button className="bg-[#af74d7] text-white rounded-xl w-[120px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5]">
+              Update Task
+            </button>
+          </div>
+        </form>
+      </Modal>
     </>
   );
 };
