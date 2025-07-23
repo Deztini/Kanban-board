@@ -5,7 +5,7 @@ import Modal from "../components/ui/Modal";
 import { useState } from "react";
 import ColorPicker from "../components/ColorPicker";
 import type { ProjectProps } from "../types/types";
-import boardImg from "../../public/assets/boardimage.jpg";
+import boardImg from "../assets/boardimage.jpg";
 
 // const todoTasks = [
 //   {

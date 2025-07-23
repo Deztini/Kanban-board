@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export type taskProps = {
   id: number;
   title: string;
@@ -11,4 +13,12 @@ export type ProjectProps = {
   projectTitle: string;
   borderColors: string;
   boardId: string
+};
+
+
+export type featureProps = {
+  id: number;
+  title: string;
+  description: string;
+  icon: LucideIcon;
 };
