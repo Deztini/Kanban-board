@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import Modal from "./ui/Modal";
 import type { ProjectProps, taskProps } from "../types/types";
 import { TaskContext } from "../store/context/project-context";
+import { DraggableContext } from "../store/context/draggable-context";
 
 const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   projectTitle,
@@ -12,6 +13,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const taskCtx = useContext(TaskContext);
+  const dragCtx = useContext(DraggableContext);
   const boardTask = taskCtx.tasks.filter((task) => task.boardId === boardId);
   // const [tasks, setTasks] = useState<taskProps[]>(dummyTask);
 
@@ -46,9 +48,25 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     setModalOpen(false);
   };
 
+  const handleDrop = (targetBoardId: string) => {
+    if (!dragCtx.draggableTask) return;
+
+    const draggedTask = dragCtx.draggableTask.task;
+
+    const updatedTask = { ...draggedTask, boardId: targetBoardId };
+
+    taskCtx.setTasks((prevTask) =>
+      prevTask.map((t) => (t.id === draggedTask.id ? updatedTask : t))
+    );
+
+    dragCtx.setDraggableTask(null);
+  };
+
   return (
     <>
       <div
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={() => handleDrop(boardId)}
         className={`w-[28%] h-full bg-[#121212] py-4 px-4 rounded-2xl ${borderColors} border-2 `}
       >
         <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>

@@ -162,7 +162,7 @@ const Mainboard: FC = () => {
   }
   return (
     <>
-      <div className="h-screen bg-black px-8 py-12">
+      <div className="min-h-screen bg-black px-8 py-12">
         <h1 className="text-white text-3xl mb-8">
           Welcome Back,{" "}
           <span className="text-shadow-purple uppercase text-[#af74d7]">

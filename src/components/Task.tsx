@@ -4,17 +4,18 @@ import { Ellipsis, Pencil, Trash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Modal from "./ui/Modal";
 import { TaskContext } from "../store/context/project-context";
-
+import { DraggableContext } from "../store/context/draggable-context";
 
 const Task: FC<taskProps> = ({ id, boardId }) => {
   const taskCtx = useContext(TaskContext);
+  const dragCtx = useContext(DraggableContext);
   const [isClicked, setIsClicked] = useState<boolean>();
   const [edit, setEdit] = useState(false);
 
-  const latestTask = taskCtx.tasks.find((t) => t.id === id);
-  if (!latestTask) return null;
+  const specificTask = taskCtx.tasks.find((t) => t.id === id);
+  if (!specificTask) return null;
 
-  const { title, description, date, priority } = latestTask;
+  const { title, description, date, priority } = specificTask;
 
   const [editTitle, setEditTitle] = useState(title);
   const [editDescription, setEditDescription] = useState(description);
@@ -68,9 +69,17 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
     taskCtx.setTasks((prevTask) => prevTask.filter((t) => t.id !== id));
   };
 
+  const handleDrag = (task: taskProps) => {
+    dragCtx.setDraggableTask({ task });
+  };
+
   return (
     <>
-      <div className="bg-black w-90 h-60 py-4 px-6 rounded-xl relative">
+      <div
+        draggable
+        onDragStart={() => handleDrag(specificTask)}
+        className="bg-black w-90 h-60 py-4 px-6 rounded-xl relative"
+      >
         <div className="flex justify-between items-center">
           <h1 className="text-white text-2xl font-bold mb-2">{title}</h1>
           <button className="text-white cursor-pointer" onClick={toggleOverlay}>

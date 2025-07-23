@@ -4,6 +4,7 @@ import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import Mainboard from "./pages/Mainboard";
 import TaskContextProvider from "./store/context/project-context";
+import DraggableContextProvider from "./store/context/draggable-context";
 
 function App() {
   const router = createBrowserRouter([
@@ -16,7 +17,9 @@ function App() {
   return (
     <>
       <TaskContextProvider>
-        <RouterProvider router={router} />
+        <DraggableContextProvider>
+          <RouterProvider router={router} />
+        </DraggableContextProvider>
       </TaskContextProvider>
     </>
   );
