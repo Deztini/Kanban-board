@@ -5,12 +5,29 @@ import Login from "./pages/Login";
 import Mainboard from "./pages/Mainboard";
 import TaskContextProvider from "./store/context/project-context";
 import DraggableContextProvider from "./store/context/draggable-context";
+import RootLayout from "./pages/Root";
+import Dashboard from "./pages/Dashboard";
+import ProjectsPage from "./pages/Projects";
 
 function App() {
   const router = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/signup", element: <Signup /> },
     { path: "/login", element: <Login /> },
+    {
+      path: "/projectpulse",
+      element: <RootLayout />,
+      children: [
+        {
+          path: "/projectpulse/dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "projectpulse/projects",
+          element: <ProjectsPage />,
+        },
+      ],
+    },
     { path: "/board", element: <Mainboard /> },
   ]);
 

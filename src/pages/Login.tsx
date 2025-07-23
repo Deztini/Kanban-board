@@ -37,7 +37,7 @@ const Login: FC = () => {
       toast.success("Login Successful");
 
       setTimeout(() => {
-        navigate("/board");
+        navigate("/projectpulse/dashboard");
       }, 2000);
     } else {
       toast.error(data.message);
@@ -77,7 +77,7 @@ const Login: FC = () => {
 
             <button
               className="bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5]"
-              onClick={() => navigate("/board")}
+              onClick={() => navigate("/projectpulse/dashboard")}
             >
               Login
             </button>
