@@ -9,7 +9,7 @@ const DashboardCard: FC<dashboardCardProps> = ({
   iconColor
 }) => {
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[270px] h-[150px] px-4 py-4 rounded-xl">
+    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[280px] h-[150px] px-4 py-4 rounded-xl">
       <div className="flex justify-between">
         <h1 className="text-[#ccc] font-bold text-xl">{title}</h1>
         <Icon color={iconColor} />

@@ -23,7 +23,7 @@ function App() {
           element: <Dashboard />,
         },
         {
-          path: "projectpulse/projects",
+          path: "/projectpulse/projects",
           element: <ProjectsPage />,
         },
       ],

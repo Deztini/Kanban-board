@@ -4,10 +4,14 @@ import { LoaderCircle } from "lucide-react";
 import { SquareChartGantt } from "lucide-react";
 import { CircleCheck } from "lucide-react";
 import { CalendarDays } from "lucide-react";
+import ProjectStatus from "../components/DashboardSection";
+import DashboardSection from "../components/DashboardSection";
+import RecentActivity from "../components/RecentActivity";
+import Deadlines from "../components/Deadlines";
 
 const Dashboard: FC = () => {
   return (
-    <div className="mt-12">
+    <div className="mt-4">
       <h1 className="text-white font-bold text-4xl ">Dashboard Overview</h1>
 
       <div className="flex gap-4 mt-8">
@@ -39,6 +43,12 @@ const Dashboard: FC = () => {
           icon={CalendarDays}
           iconColor="red"
         />
+      </div>
+
+      <div className="flex gap-4 items-center mt-10">
+        <DashboardSection />
+        <RecentActivity />
+        <Deadlines />
       </div>
     </div>
   );
