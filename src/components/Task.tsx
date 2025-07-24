@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { taskProps } from "../types/types";
 import { Ellipsis, Pencil, Trash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import Modal from "./ui/Modal";
+import Modal from "./UI/Modal";
 import { TaskContext } from "../store/context/project-context";
 import { DraggableContext } from "../store/context/draggable-context";
 

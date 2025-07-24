@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Plus } from "lucide-react";
 import Projectboard from "../components/Projectboard";
-import Modal from "../components/ui/Modal";
+import Modal from "../components/UI/Modal";
 import { useState } from "react";
 import ColorPicker from "../components/ColorPicker";
 import type { ProjectProps } from "../types/types";

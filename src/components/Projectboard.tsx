@@ -1,7 +1,7 @@
 import { useState, type FC, useContext } from "react";
 import Task from "./Task";
 import { Plus } from "lucide-react";
-import Modal from "./ui/Modal";
+import Modal from "./UI/Modal";
 import type { ProjectProps, taskProps } from "../types/types";
 import { TaskContext } from "../store/context/project-context";
 import { DraggableContext } from "../store/context/draggable-context";

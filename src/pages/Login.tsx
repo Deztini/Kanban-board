@@ -34,13 +34,14 @@ const Login: FC = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userName", data.name);
 
-      toast.success("Login Successful");
+       toast.success("Login Successful");
 
       setTimeout(() => {
         navigate("/projectpulse/dashboard");
-      }, 2000);
+      }, 4000);
     } else {
       toast.error(data.message);
+      console.log(data.message);
     }
   };
   return (
@@ -75,10 +76,7 @@ const Login: FC = () => {
               />
             </div>
 
-            <button
-              className="bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5]"
-              onClick={() => navigate("/projectpulse/dashboard")}
-            >
+            <button className="bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5]">
               Login
             </button>
           </form>

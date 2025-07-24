@@ -22,3 +22,11 @@ export type featureProps = {
   description: string;
   icon: LucideIcon;
 };
+
+export type dashboardCardProps = {
+  title: string;
+  value: number;
+  progress: string;
+  icon: LucideIcon;
+  iconColor: string;
+};
