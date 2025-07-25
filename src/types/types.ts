@@ -35,3 +35,12 @@ export type tabProps = {
   selectedType: string;
   onSelect: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
+
+export type projectCardProps = {
+  title: string;
+  description: string;
+  status: string;
+  taskCompleted: number;
+  targetTask: number;
+  statusColor: string;
+};

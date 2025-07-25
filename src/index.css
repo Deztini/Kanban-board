@@ -3,3 +3,24 @@
 .text-shadow-purple {
   text-shadow: 2px 2px 4px #af74d7;
 }
+
+.progress {
+  width: 100%;
+  height: 12px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.progress::-webkit-progress-bar {
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.progress::-webkit-progress-value {
+  background-color: #af74d7;
+  border-radius: 20px;
+}
+
+.progress::-moz-progress-bar {
+  background-color: #af74d7;
+}
