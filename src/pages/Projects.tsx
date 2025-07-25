@@ -5,106 +5,109 @@ import { ClipboardList, Plus } from "lucide-react";
 import { Activity } from "lucide-react";
 import { ListChecks } from "lucide-react";
 import { Archive } from "lucide-react";
+import { FolderPlus } from "lucide-react";
 import Tabs from "../components/Tabs";
 import ProjectCard from "../components/ProjectCard";
 import Modal from "../components/UI/Modal";
+import type { generalProjectProps } from "../types/types";
 
-const DUMMY_PROJECTS = [
-  {
-    title: "Automated Testing Suite",
-    status: "Active",
-    description:
-      "Implement a comprehensive automated testing suite to improve code quality and deployment speed.",
-    targetTask: 20,
-    taskCompleted: 14,
-    statusColor: "purple",
-  },
-  {
-    title: "Backend API Development",
-    status: "Active",
-    description:
-      "Develop and integrate new RESTful APIs for improved data handling and scalability.",
-    targetTask: 20,
-    taskCompleted: 12,
-    statusColor: "purple",
-  },
-  {
-    title: "Cloud Infrastructure Upgrade",
-    status: "On Hold",
-    description:
-      "Migrate existing services to a more scalable and cost-effective cloud infrastructure..",
-    targetTask: 20,
-    taskCompleted: 2,
-    statusColor: "gold",
-  },
-  {
-    title: "Customer Feedback Analysis",
-    status: "Active",
-    description:
-      "Analyze recent customer feedback to identify common pain points and feature requests..",
-    targetTask: 10,
-    taskCompleted: 5,
-    statusColor: "purple",
-  },
-  {
-    title: "Documentation Refresh",
-    status: "Active",
-    description:
-      "Update and expand project documentation for new features and existing ones..",
-    targetTask: 20,
-    taskCompleted: 8,
-    statusColor: "purple",
-  },
-  {
-    title: "Marketing Campaign Launch",
-    status: "Active",
-    description:
-      "Plan and execute the Q3 marketing campaign for Project Pulse..",
-    targetTask: 20,
-    taskCompleted: 18,
-    statusColor: "purple",
-  },
-  {
-    title: "Mobile App Integration",
-    status: "On Hold",
-    description:
-      "Integrate Project Pulse with native iOS and Android applications..",
-    targetTask: 20,
-    taskCompleted: 5,
-    statusColor: "gold",
-  },
-  {
-    title: "Performance Optimization",
-    status: "Active",
-    description:
-      "Identify and resolve performance bottlenecks across the application.",
-    targetTask: 20,
-    taskCompleted: 16,
-    statusColor: "purple",
-  },
-  {
-    title: "Project Pulse UI Redesign",
-    status: "Active",
-    description:
-      "Lead the visual overhaul and UX improvements for the Project Pulse application.",
-    targetTask: 20,
-    taskCompleted: 15,
-    statusColor: "purple",
-  },
-  {
-    title: "User Onboarding Flow",
-    status: "Completed",
-    description:
-      "Redesign the initial user onboarding experience to improve conversion rates.",
-    targetTask: 10,
-    taskCompleted: 10,
-    statusColor: "green",
-  },
-];
+// const DUMMY_PROJECTS: generalProjectProps[] = [
+//   {
+//     title: "Automated Testing Suite",
+//     status: "Active",
+//     description:
+//       "Implement a comprehensive automated testing suite to improve code quality and deployment speed.",
+//     targetTask: 20,
+//     taskCompleted: 14,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Backend API Development",
+//     status: "Active",
+//     description:
+//       "Develop and integrate new RESTful APIs for improved data handling and scalability.",
+//     targetTask: 20,
+//     taskCompleted: 12,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Cloud Infrastructure Upgrade",
+//     status: "On Hold",
+//     description:
+//       "Migrate existing services to a more scalable and cost-effective cloud infrastructure..",
+//     targetTask: 20,
+//     taskCompleted: 2,
+//     statusColor: "gold",
+//   },
+//   {
+//     title: "Customer Feedback Analysis",
+//     status: "Active",
+//     description:
+//       "Analyze recent customer feedback to identify common pain points and feature requests..",
+//     targetTask: 10,
+//     taskCompleted: 5,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Documentation Refresh",
+//     status: "Active",
+//     description:
+//       "Update and expand project documentation for new features and existing ones..",
+//     targetTask: 20,
+//     taskCompleted: 8,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Marketing Campaign Launch",
+//     status: "Active",
+//     description:
+//       "Plan and execute the Q3 marketing campaign for Project Pulse..",
+//     targetTask: 20,
+//     taskCompleted: 18,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Mobile App Integration",
+//     status: "On Hold",
+//     description:
+//       "Integrate Project Pulse with native iOS and Android applications..",
+//     targetTask: 20,
+//     taskCompleted: 5,
+//     statusColor: "gold",
+//   },
+//   {
+//     title: "Performance Optimization",
+//     status: "Active",
+//     description:
+//       "Identify and resolve performance bottlenecks across the application.",
+//     targetTask: 20,
+//     taskCompleted: 16,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "Project Pulse UI Redesign",
+//     status: "Active",
+//     description:
+//       "Lead the visual overhaul and UX improvements for the Project Pulse application.",
+//     targetTask: 20,
+//     taskCompleted: 15,
+//     statusColor: "purple",
+//   },
+//   {
+//     title: "User Onboarding Flow",
+//     status: "Completed",
+//     description:
+//       "Redesign the initial user onboarding experience to improve conversion rates.",
+//     targetTask: 10,
+//     taskCompleted: 10,
+//     statusColor: "green",
+//   },
+// ];
 
 const ProjectsPage: FC = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
+  const [projects, setProjects] = useState<generalProjectProps[]>([]);
   const openModalHandler = () => {
     setModalOpen(true);
   };
@@ -112,12 +115,63 @@ const ProjectsPage: FC = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-    // const [projects, setProjects] = useState(DUMMY_PROJECTS);
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const taskTitle = formData.get("projectTitle") as string;
+    const description = formData.get("description") as string;
+    const status = formData.get("status") as string;
+    const taskCompleted = formData.get("taskCompleted") as number;
+    const targetTask = formData.get("targetTask") as number;
+    const statusColor = formData.get("statusColor") as string;
+    const newProject: generalProjectProps = {
+      title: taskTitle,
+      description,
+      status,
+      taskCompleted,
+      targetTask,
+      statusColor,
+    };
+
+    setProjects((prevProjects) => [...prevProjects, newProject]);
+    setModalOpen(false);
+  };
 
   const filteredProjects =
     selectedType === "All"
-      ? DUMMY_PROJECTS
-      : DUMMY_PROJECTS.filter((proj) => proj.status === selectedType);
+      ? projects
+      : projects.filter((proj) => proj.status === selectedType);
+
+  let content = (
+    <div className="flex gap-12 flex-wrap mt-6">
+      {filteredProjects.map((proj, index) => (
+        <ProjectCard
+          key={index}
+          title={proj.title}
+          status={proj.status}
+          description={proj.description}
+          targetTask={proj.targetTask}
+          taskCompleted={proj.taskCompleted}
+          statusColor={proj.statusColor}
+        />
+      ))}
+    </div>
+  );
+
+  if (projects.length === 0) {
+    content = (
+      <div className="flex flex-col items-center justify-center text-center text-white mt-10">
+        <FolderPlus className="w-12 h-12 text-gray-400 mb-4" />
+        <p className="text-2xl font-semibold mb-1">No Projects Yet</p>
+        <p className="text-xl text-gray-400">
+          Click the "Create New Project" button to get started.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex justify-between">
@@ -185,19 +239,7 @@ const ProjectsPage: FC = () => {
         />
       </div>
 
-      <div className="flex gap-12 flex-wrap mt-6">
-        {filteredProjects.map((proj, index) => (
-          <ProjectCard
-            key={index}
-            title={proj.title}
-            status={proj.status}
-            description={proj.description}
-            targetTask={proj.targetTask}
-            taskCompleted={proj.taskCompleted}
-            statusColor={proj.statusColor}
-          />
-        ))}
-      </div>
+      {content}
 
       <Modal
         title="Create New Project"
@@ -207,7 +249,7 @@ const ProjectsPage: FC = () => {
         width="w-[380px]"
         height="h-[600px]"
       >
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={submitHandler}>
           <div className="flex flex-col gap-2">
             <label className="text-white">Project Title</label>
             <input
@@ -215,7 +257,7 @@ const ProjectsPage: FC = () => {
               required
               placeholder=""
               className="bg-black h-[35px] rounded px-4 py-4 text-white"
-              name="boardName"
+              name="projectTitle"
             />
           </div>
 
@@ -233,14 +275,14 @@ const ProjectsPage: FC = () => {
             <select
               className="bg-black h-[40px] text-white px-4 py-2"
               defaultValue=""
-              name="priority"
+              name="status"
             >
               <option value="" disabled>
                 Select Status
               </option>
-              <option value="low">Active</option>
-              <option value="high">Completed</option>
-              <option value="medium">On Hold</option>
+              <option>Active</option>
+              <option>Completed</option>
+              <option>On Hold</option>
             </select>
           </div>
 
@@ -251,7 +293,7 @@ const ProjectsPage: FC = () => {
               required
               placeholder=""
               className="bg-black h-[35px] rounded px-4 py-4 text-white"
-              name="boardName"
+              name="targetTask"
             />
           </div>
 
@@ -263,7 +305,18 @@ const ProjectsPage: FC = () => {
               placeholder=""
               defaultValue={0}
               className="bg-black h-[35px] rounded px-4 py-4 text-white"
-              name="boardName"
+              name="taskCompleted"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Status Color</label>
+            <input
+              type="text"
+              required
+              placeholder=""
+              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              name="statusColor"
             />
           </div>
 

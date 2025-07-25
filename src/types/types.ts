@@ -44,3 +44,12 @@ export type projectCardProps = {
   targetTask: number;
   statusColor: string;
 };
+
+export type generalProjectProps = {
+  title: string;
+  description: string;
+  status: string;
+  taskCompleted: number;
+  targetTask: number;
+  statusColor: string;
+};
