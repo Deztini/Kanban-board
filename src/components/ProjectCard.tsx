@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { projectCardProps } from "../types/types";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard: FC<projectCardProps> = ({
   title,
@@ -8,7 +9,9 @@ const ProjectCard: FC<projectCardProps> = ({
   targetTask,
   taskCompleted,
   statusColor,
+  id,
 }) => {
+  const navigate = useNavigate();
   const progressValue = Math.floor((taskCompleted / targetTask) * 100);
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[300px] h-[400px] px-6 py-4 rounded-xl">
@@ -37,7 +40,10 @@ const ProjectCard: FC<projectCardProps> = ({
         Tasks: {taskCompleted} / {targetTask} Completed
       </p>
 
-      <button className="text-white bg-black border-2 border-solid border-[#3E3A45] rounded-[7px] py-2 px-4 w-[100%] cursor-pointer">
+      <button
+        className="text-white bg-black border-2 border-solid border-[#3E3A45] rounded-[7px] py-2 px-4 w-[100%] cursor-pointer"
+        onClick={() => navigate(`/projectpulse/projects/${id}`)}
+      >
         View Project
       </button>
     </div>

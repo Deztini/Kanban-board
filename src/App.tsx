@@ -28,7 +28,10 @@ function App() {
         },
       ],
     },
-    { path: "/board", element: <Mainboard /> },
+    {
+      path: "/projectpulse/projects/:projectId",
+      element: <Mainboard />,
+    },
   ]);
 
   return (

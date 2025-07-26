@@ -67,7 +67,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={() => handleDrop(boardId)}
-        className={`w-[28%] h-full bg-[#121212] py-4 px-4 rounded-2xl ${borderColors} border-2 `}
+        className={`w-[24%] h-full bg-[#121212] py-4 px-4 rounded-2xl ${borderColors} border-2 `}
       >
         <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
         <div className="flex flex-col gap-3">

@@ -155,6 +155,7 @@ const ProjectsPage: FC = () => {
           targetTask={proj.targetTask}
           taskCompleted={proj.taskCompleted}
           statusColor={proj.statusColor}
+          id={proj.title}
         />
       ))}
     </div>

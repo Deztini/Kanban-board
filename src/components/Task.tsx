@@ -78,7 +78,7 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
       <div
         draggable
         onDragStart={() => handleDrag(specificTask)}
-        className="bg-black w-90 h-60 py-4 px-6 rounded-xl relative"
+        className="bg-black w-78 h-60 py-4 px-6 rounded-xl relative"
       >
         <div className="flex justify-between items-center">
           <h1 className="text-white text-2xl font-bold mb-2">{title}</h1>
