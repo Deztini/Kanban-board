@@ -3,10 +3,11 @@ import type { LucideIcon } from "lucide-react";
 export type taskProps = {
   id: number;
   title: string;
-  description: string;
+  assignee: string;
   date: string;
   priority: string;
   boardId: string;
+  label: string[];
 };
 
 export type ProjectProps = {

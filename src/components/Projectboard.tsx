@@ -1,6 +1,6 @@
 import { useState, type FC, useContext } from "react";
 import Task from "./Task";
-import { Plus } from "lucide-react";
+import { Plus, PlusIcon } from "lucide-react";
 import Modal from "./UI/Modal";
 import type { ProjectProps, taskProps } from "../types/types";
 import { TaskContext } from "../store/context/project-context";
@@ -11,9 +11,11 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   borderColors,
   boardId,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const taskCtx = useContext(TaskContext);
   const dragCtx = useContext(DraggableContext);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [labels, setLabels] = useState<string[]>([""]);
+
   const boardTask = taskCtx.tasks.filter((task) => task.boardId === boardId);
   // const [tasks, setTasks] = useState<taskProps[]>(dummyTask);
 
@@ -30,17 +32,18 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
 
     const formData = new FormData(e.currentTarget);
     const taskTitle = formData.get("title") as string;
-    const description = formData.get("description") as string;
+    const assignee = formData.get("assign") as string;
     const priority = formData.get("priority") as string;
     const date = formData.get("date") as string;
 
     const newTask: taskProps = {
       id: Math.random(),
       title: taskTitle,
-      description,
+      assignee,
       date,
       priority,
       boardId,
+      label: labels,
     };
 
     taskCtx.setTasks((prevTask) => [...prevTask, { ...newTask }]);
@@ -62,6 +65,19 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     dragCtx.setDraggableTask(null);
   };
 
+  const handleLabelChange = (index: number, value: string) => {
+    const updatedLabels = [...labels];
+    updatedLabels[index] = value;
+    setLabels(updatedLabels);
+  };
+
+  const handleAddLabel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (labels.length < 2) {
+      setLabels((label) => [...label, ""]);
+    }
+  };
+
   return (
     <>
       <div
@@ -69,7 +85,11 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
         onDrop={() => handleDrop(boardId)}
         className={`w-[24%] h-full bg-[#121212] py-4 px-4 rounded-2xl ${borderColors} border-2 `}
       >
-        <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
+          <p className="w-9 h-9 rounded-full flex items-center justify-center bg-[#af74d7]/10 text-[#af74d7] font-semibold ">{boardTask.length}</p>
+        </div>
+
         <div className="flex flex-col gap-3">
           {boardTask.length > 0 ? (
             boardTask.map((t) => (
@@ -118,11 +138,13 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Description</label>
-              <textarea
-                placeholder="Add detailed notes, subtasks, or links related to this task..."
-                className="bg-black  rounded px-4 py-4 text-white"
-                name="description"
+              <label className="text-white">Assignee</label>
+              <input
+                type="text"
+                required
+                placeholder="John Doe"
+                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                name="assign"
               />
             </div>
 
@@ -153,7 +175,40 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
               />
             </div>
 
-            <div className="flex justify-end gap-12 mt-8">
+            <div className="flex flex-col gap-2">
+              <label className="text-white">Add Label(s)</label>
+              <div
+                className={
+                  labels.length < 2
+                    ? "flex justify-between"
+                    : "flex flex-col gap-2"
+                }
+              >
+                {labels.map((label, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    required
+                    name=""
+                    value={label}
+                    placeholder={index === 0 ? "Backend" : "Another Label"}
+                    onChange={(e) => handleLabelChange(index, e.target.value)}
+                    className=" bg-black h-[35px] w-[100%] rounded px-4 py-4 text-white "
+                  />
+                ))}
+
+                {labels.length < 2 && (
+                  <button
+                    className="text-white cursor-pointer hover:text-[#af74d7]"
+                    onClick={handleAddLabel}
+                  >
+                    <PlusIcon />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-12 mt-2">
               <button
                 onClick={handleCloseModal}
                 className="text-white cursor-pointer"

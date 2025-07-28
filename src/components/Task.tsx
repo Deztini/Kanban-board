@@ -1,6 +1,13 @@
 import type { FC } from "react";
 import type { taskProps } from "../types/types";
-import { Ellipsis, Pencil, Trash } from "lucide-react";
+import {
+  CalendarDays,
+  Ellipsis,
+  Pencil,
+  Trash,
+  PlusIcon,
+  Minus,
+} from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Modal from "./UI/Modal";
 import { TaskContext } from "../store/context/project-context";
@@ -15,12 +22,13 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
   const specificTask = taskCtx.tasks.find((t) => t.id === id);
   if (!specificTask) return null;
 
-  const { title, description, date, priority } = specificTask;
+  const { title, assignee, date, priority, label } = specificTask;
 
   const [editTitle, setEditTitle] = useState(title);
-  const [editDescription, setEditDescription] = useState(description);
+  const [editAssignee, setEditAssignee] = useState(assignee);
   const [editPriority, setEditPriority] = useState(priority);
   const [editDate, setEditDate] = useState(date);
+  const [editLabel, setEditLabel] = useState<string[]>(label);
 
   function toggleOverlay() {
     setIsClicked((prev) => !prev);
@@ -39,9 +47,10 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
 
     if (editTask) {
       setEditTitle(editTask.title);
-      setEditDescription(editTask.description);
+      setEditAssignee(editTask.assignee);
       setEditPriority(editTask.priority);
       setEditDate(editTask.date);
+      setEditLabel(editTask.label);
     }
   }, [edit, id, taskCtx.tasks]);
 
@@ -51,9 +60,10 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
     const updatedTask: taskProps = {
       id,
       title: editTitle,
-      description: editDescription,
+      assignee: editAssignee,
       date: editDate,
       priority: editPriority,
+      label: editLabel,
       boardId,
     };
 
@@ -73,49 +83,87 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
     dragCtx.setDraggableTask({ task });
   };
 
+  const handleLabelChange = (index: number, value: string) => {
+    const updatedLabels = [...editLabel];
+    updatedLabels[index] = value;
+    setEditLabel(updatedLabels);
+  };
+
+  const handleAddLabel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (editLabel.length < 2) {
+      setEditLabel((label) => [...label, ""]);
+    }
+  };
+
+  const handleRemoveLabel = (index: number) => {
+    const updatedLabels = [...editLabel];
+    updatedLabels.splice(index, 1);
+    setEditLabel(updatedLabels);
+  };
+
   return (
     <>
       <div
         draggable
         onDragStart={() => handleDrag(specificTask)}
-        className="bg-black w-78 h-60 py-4 px-6 rounded-xl relative"
+        className="bg-[#000] w-78 h-auto py-4 px-6 rounded-xl relative"
       >
-        <div className="flex justify-between items-center">
-          <h1 className="text-white text-2xl font-bold mb-2">{title}</h1>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-white text-xl font-bold mb-2">{title}</h1>
+
+            <p
+              className={
+                priority === "high"
+                  ? "bg-[ #3C1F20] text-[#FF4C4C] rounded-3xl w-25 px-2 py-2"
+                  : "text-white"
+              }
+            >
+              {priority}
+            </p>
+          </div>
+
           <button className="text-white cursor-pointer" onClick={toggleOverlay}>
             <Ellipsis />
           </button>
         </div>
 
-        <div className="flex justify-between">
-          <p className="text-[#ccc] font-bold mb-6">{description}</p>
-          {isClicked && (
-            <div className="bg-[#121212] h-28 w-35 flex flex-col gap-1 z-10 absolute top-13 right-5 rounded-xl px-3 py-3">
-              <button
-                className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
-                onClick={handleEdit}
-              >
-                {" "}
-                <Pencil style={{ color: "#3B82F6" }} /> Edit
-              </button>
-              <button
-                className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
-                onClick={handleDelete.bind(this, id)}
-              >
-                {" "}
-                <Trash style={{ color: "#EF4444" }} /> Delete
-              </button>
-            </div>
-          )}
+        <div className="flex gap-4 mt-4">
+          {label.map((l, index) => (
+            <p
+              key={index}
+              className="text-white font-semibold bg-[#121212] rounded-xl shadow-lg px-2 py-2 mb-2"
+            >
+              {l}
+            </p>
+          ))}
         </div>
+        {isClicked && (
+          <div className="bg-[#121212] h-28 w-35 flex flex-col gap-1 z-10 absolute top-13 right-5 rounded-xl px-3 py-3">
+            <button
+              className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+              onClick={handleEdit}
+            >
+              {" "}
+              <Pencil style={{ color: "#3B82F6" }} /> Edit
+            </button>
+            <button
+              className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+              onClick={handleDelete.bind(this, id)}
+            >
+              {" "}
+              <Trash style={{ color: "#EF4444" }} /> Delete
+            </button>
+          </div>
+        )}
 
-        <div className="flex gap-4">
-          <p className="rounded-4xl text-white bg-[#af74d7] py-2 px-2">
-            {priority}
-          </p>
-          <p className=" text-white border border-[#ccc] rounded-2xl py-1 px-1">
-            {date}
-          </p>
+        <div className="flex items-center justify-between">
+          <p className="text-[#ccc] font-bold">{assignee}</p>
+          <div className="flex items-center gap-2">
+            <CalendarDays size={16} color="#ccc" />
+            <p className=" text-[#ccc]">{date}</p>
+          </div>
         </div>
       </div>
 
@@ -142,13 +190,15 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-white">Description</label>
-            <textarea
-              placeholder="Add detailed notes, subtasks, or links related to this task..."
-              className="bg-black  rounded px-4 py-4 text-white"
-              name="description"
-              value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
+            <label className="text-white">Assignee</label>
+            <input
+              type="text"
+              required
+              placeholder="John Doe"
+              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              name="assign"
+              value={editAssignee}
+              onChange={(e) => setEditAssignee(e.target.value)}
             />
           </div>
 
@@ -180,6 +230,48 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
               value={editDate}
               onChange={(e) => setEditDate(e.target.value)}
             />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Add Label(s)</label>
+            <div
+              className={
+                editLabel.length < 2
+                  ? "flex justify-between"
+                  : "flex flex-col gap-2"
+              }
+            >
+              {editLabel.map((label, index) => (
+                <div key={index} className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    required
+                    name=""
+                    value={label}
+                    placeholder={index === 0 ? "Backend" : "Another Label"}
+                    onChange={(e) => handleLabelChange(index, e.target.value)}
+                    className=" bg-black h-[35px] w-[100%] rounded px-4 py-4 text-white "
+                  />
+                  {editLabel.length === 2 && (
+                    <button
+                      className="text-white cursor-pointer hover:text-[#af74d7]"
+                      onClick={() => handleRemoveLabel(index)}
+                    >
+                      <Minus />
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              {editLabel.length < 2 && (
+                <button
+                  className="text-white cursor-pointer hover:text-[#af74d7]"
+                  onClick={handleAddLabel}
+                >
+                  <PlusIcon />
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end gap-12 mt-8">

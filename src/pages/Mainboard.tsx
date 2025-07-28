@@ -1,17 +1,11 @@
 import type { FC } from "react";
-import { Plus } from "lucide-react";
 import Projectboard from "../components/Projectboard";
-import Modal from "../components/UI/Modal";
-import { useState } from "react";
-import ColorPicker from "../components/ColorPicker";
-import type { ProjectProps } from "../types/types";
-import boardImg from "../assets/boardimage.jpg";
 import { useParams } from "react-router-dom";
 
 const Mainboard: FC = () => {
   const params = useParams();
 
-  const name = localStorage.getItem("userName");
+  // const name = localStorage.getItem("userName");
 
   return (
     <>
@@ -29,22 +23,22 @@ const Mainboard: FC = () => {
           <Projectboard
             projectTitle="To Do"
             boardId="To Do"
-            borderColors="border-purple-500"
+            borderColors="border-[#3E3A45]"
           />
           <Projectboard
             projectTitle="In Progress"
             boardId="In Progress"
-            borderColors="border-pink-500"
+            borderColors="border-[#3E3A45]"
           />
           <Projectboard
             projectTitle="Review"
             boardId="Review"
-            borderColors="border-orange-500"
+            borderColors="border-[#3E3A45]"
           />
           <Projectboard
             projectTitle="Done"
             boardId="Done"
-            borderColors="border-blue-500"
+            borderColors="border-[#3E3A45]"
           />
         </div>
       </div>
