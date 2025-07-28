@@ -8,6 +8,7 @@ import DraggableContextProvider from "./store/context/draggable-context";
 import RootLayout from "./pages/Root";
 import Dashboard from "./pages/Dashboard";
 import ProjectsPage from "./pages/Projects";
+import TeamManagement from "./pages/TeamManagement";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
           path: "/projectpulse/projects",
           element: <ProjectsPage />,
         },
+        {
+          path: "/projectpulse/teams",
+          element: <TeamManagement />
+        }
       ],
     },
     {

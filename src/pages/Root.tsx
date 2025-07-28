@@ -1,9 +1,10 @@
 import type { FC } from "react";
 import Sidebar from "../components/Layout/Sidebar";
 import logo from "../assets/projectpulselogo.png";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const RootLayout: FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex bg-black min-h-screen">
       <div className=" w-[240px] flex-1/6">
@@ -11,7 +12,7 @@ const RootLayout: FC = () => {
       </div>
 
       <main className="flex-1 flex flex-col px-6 py-4">
-        <header className="w-full mb-0">
+        <header className="w-full mb-0 cursor-pointer" onClick={() => navigate("/")}>
           <img className="w-25 h-auto" src={logo} alt="" />
         </header>
 

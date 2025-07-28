@@ -67,10 +67,10 @@ const Signup: FC = () => {
       <ToastContainer position="top-center" />
       <div className="bg-black h-screen flex justify-center items-center">
         <div className="bg-[#121212] w-100 h-150 flex flex-col items-center p-4 rounded-xl shadow-2xl">
-          <h1 className="text-white text-2xl font-bold">Kanban Flow</h1>
+          <h1 className="text-white text-2xl font-bold">Project Pulse</h1>
           <h2 className="text-white text-2xl font-bold">Create your account</h2>
           <p className="text-[#ccc] text-center">
-            Start organizing your work visually with Kanban Flow.
+            Start organizing your work visually with Project Pulse.
           </p>
 
           <form className="text-white mt-4" onSubmit={signupHandler}>
