@@ -1,17 +1,45 @@
 import { Plus, SquarePen, Trash } from "lucide-react";
 import type { FC } from "react";
+import { useState } from "react";
+import Modal from "./UI/Modal";
 
 const dummyAssignees = [
   {
+    id: 1,
     name: "Adaobi Nwankwo",
     email: "adaobi.nwankwo@example.com",
     role: "Admin",
   },
-  { name: "John Smith", email: "john.smith@example.com", role: "Member" },
-  { name: "Emeka Okoye", email: "emeka.okoye@example.com", role: "Member" },
-  { name: "Fatima Bello", email: "fatima.bello@example.com", role: "Viewer" },
-  { name: "Mark Johnson", email: "mark.johnson@example.com", role: "Admin" },
-  { name: "Chidera Umeh", email: "chidera.umeh@example.com", role: "Member" },
+  {
+    id: 2,
+    name: "John Smith",
+    email: "john.smith@example.com",
+    role: "Member",
+  },
+  {
+    id: 3,
+    name: "Emeka Okoye",
+    email: "emeka.okoye@example.com",
+    role: "Member",
+  },
+  {
+    id: 4,
+    name: "Fatima Bello",
+    email: "fatima.bello@example.com",
+    role: "Viewer",
+  },
+  {
+    id: 5,
+    name: "Mark Johnson",
+    email: "mark.johnson@example.com",
+    role: "Admin",
+  },
+  {
+    id: 6,
+    name: "Chidera Umeh",
+    email: "chidera.umeh@example.com",
+    role: "Member",
+  },
   //   { name: "Lucy Daniels", email: "lucy.daniels@example.com", role: "Member" },
   //   { name: "Ayo Balogun", email: "ayo.balogun@example.com", role: "Member" },
   //   { name: "Sophia King", email: "sophia.king@example.com", role: "Viewer" },
@@ -32,23 +60,130 @@ const dummyAssignees = [
 ];
 
 const TeamMembers: FC = () => {
+  const [teamMembers, setTeamMembers] = useState(dummyAssignees);
+  const [roles, setRoles] = useState("Filter by roles");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [edit, setEdit] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentMember, setCurrentMember] = useState<
+    (typeof dummyAssignees)[0] | null
+  >(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<
+    (typeof dummyAssignees)[0] | null
+  >(null);
+
+  const openModalHandler = () => {
+    setModalOpen(true);
+    setEdit(false);
+    setCurrentMember(null);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setEdit(false);
+  };
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const role = formData.get("role") as string;
+
+    if (edit && currentMember) {
+      const updatedMembers = teamMembers.map((member) =>
+        member.id === currentMember.id
+          ? { ...member, name, email, role }
+          : member
+      );
+      setTeamMembers(updatedMembers);
+    } else {
+      const newMember = {
+        id: Math.random(),
+        name,
+        email,
+        role,
+      };
+
+      setTeamMembers((prevMembers) => [...prevMembers, newMember]);
+    }
+
+    setModalOpen(false);
+    setEdit(false);
+    setCurrentMember(null);
+  };
+
+  const filterHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRoles(e.target.value);
+  };
+
+  const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const editHandler = (member: (typeof dummyAssignees)[0]) => {
+    setModalOpen(true);
+    setEdit(true);
+    setCurrentMember(member);
+  };
+
+  const deleteHandler = () => {
+    if (memberToDelete) {
+      setTeamMembers((prev) =>
+        prev.filter((member) => member.id !== memberToDelete.id)
+      );
+      setDeleteModal(false);
+      setMemberToDelete(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteModal(false);
+    setMemberToDelete(null);
+  };
+
+  const filteredAssignees = teamMembers.filter((assignee) => {
+    const matchedRoles = roles === "Filter by roles" || assignee.role === roles;
+
+    const matchedSearchTerm =
+      assignee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      assignee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      assignee.role.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchedRoles && matchedSearchTerm;
+  });
+
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8">
       <div className="flex justify-between">
         <h1 className="text-white text-3xl font-bold">Team Members</h1>
         <div className="flex gap-8 items-center">
           <input
-            className="bg-[#374151] px-3 py-2 rounded-[8px] text-[#ccc]"
+            className={`bg-[#374151] px-3 py-2 rounded-[8px] text-[#ccc] focus:outline-none border-2 ${
+              searchTerm.trim() ? "border-[#8b5cf6]" : "border-transparent"
+            } `}
             type="search"
             placeholder="Search members..."
+            onChange={searchHandler}
+            value={searchTerm}
           />
-          <select className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none">
+          <select
+            className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+            onChange={filterHandler}
+            value={roles}
+          >
             <option>Filter by roles</option>
             <option>Admin</option>
             <option>Viewer</option>
-            <option>Members</option>
+            <option>Member</option>
           </select>
-          <button className="flex gap-2 bg-[#af74d7] text-white rounded-[8px] w-[165px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5]">
+          <button
+            className="flex gap-2 bg-[#af74d7] text-white rounded-[8px] w-[165px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5]"
+            onClick={openModalHandler}
+          >
             <Plus /> Add Members
           </button>
         </div>
@@ -61,7 +196,7 @@ const TeamMembers: FC = () => {
           <p>Role</p>
           <p>Actions</p>
         </div>
-        {dummyAssignees.map((assignee, index) => (
+        {filteredAssignees.map((assignee, index) => (
           <div
             key={index}
             className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  text-white font-semibold"
@@ -80,13 +215,117 @@ const TeamMembers: FC = () => {
             >
               {assignee.role}
             </p>
-            <div className="flex gap-16">
-              <SquarePen color="gray" />
-              <Trash color="red" />
+            <div className="flex gap-16 items-center">
+              <button
+                onClick={() => editHandler(assignee)}
+                className="cursor-pointer"
+              >
+                <SquarePen color="gray" />
+              </button>
+              <button
+                className="cursor-pointer"
+                onClick={() => {
+                  setMemberToDelete(assignee);
+                  setDeleteModal(true);
+                }}
+              >
+                <Trash color="red" />
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      <Modal
+        title={edit ? "Edit Team Member" : "Add New Team Members"}
+        subtitle={
+          edit
+            ? "Update the details below to modify a team member."
+            : "Fill in the details below to create a new member."
+        }
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="w-[380px]"
+        height="h-[480px]"
+      >
+        <form className="flex flex-col gap-4" onSubmit={submitHandler}>
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Name</label>
+            <input
+              type="text"
+              required
+              placeholder="Mike Sam"
+              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              name="name"
+              defaultValue={edit && currentMember ? currentMember.name : ""}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Email</label>
+            <input
+              type="email"
+              required
+              placeholder="mikesam@gmail.com"
+              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              name="email"
+              defaultValue={edit && currentMember ? currentMember.email : ""}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-white">Role</label>
+            <select
+              className="bg-black h-[40px] text-white px-4 py-2"
+              defaultValue={edit && currentMember ? currentMember.role : ""}
+              name="role"
+            >
+              <option value="" disabled>
+                Select Role
+              </option>
+              <option value="Admin">Admin</option>
+              <option value="Member">Member</option>
+              <option value="Viewer">Viewer</option>
+            </select>
+          </div>
+
+          <div className="flex justify-end gap-12 mt-2">
+            <button
+              onClick={handleCloseModal}
+              className="text-white cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button className="bg-[#af74d7] text-white rounded-xl w-auto h-auto py-2 px-4 cursor-pointer hover:bg-[#c885f5]">
+              {edit ? "Update Member" : "Create Member"}
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        title="Delete Team Member"
+        subtitle="This action cannot be undone. Are you sure you want to remove this member from the team?"
+        width="w-[380px]"
+        height="h-auto"
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+      >
+        <div className="flex justify-end gap-4 mt-6">
+          <button
+            onClick={cancelDelete}
+            className="text-white px-4 py-2 rounded hover:bg-[#333] cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={deleteHandler}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+          >
+            Delete
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
