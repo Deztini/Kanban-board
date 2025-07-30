@@ -2,6 +2,8 @@ import type { FC } from "react";
 import Card from "../components/UI/Card";
 import { CircleUserRound, Crown, Eye, Users } from "lucide-react";
 import TeamMembers from "../components/TeamMembers";
+import TeamActivity from "../components/TeamActivity";
+import TeamInvitations from "../components/TeamInvitations";
 
 const TeamManagement: FC = () => {
   return (
@@ -40,6 +42,11 @@ const TeamManagement: FC = () => {
       </div>
 
       <TeamMembers />
+      <div className="flex gap-8">
+         <TeamActivity />
+         <TeamInvitations />
+      </div>
+      
     </div>
   );
 };

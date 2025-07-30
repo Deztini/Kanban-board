@@ -1,7 +1,15 @@
-import { Plus, SquarePen, Trash } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  SquarePen,
+  Trash,
+} from "lucide-react";
 import type { FC } from "react";
 import { useState } from "react";
 import Modal from "./UI/Modal";
+
+const MEMBERS_PER_PAGE = 6;
 
 const dummyAssignees = [
   {
@@ -40,22 +48,73 @@ const dummyAssignees = [
     email: "chidera.umeh@example.com",
     role: "Member",
   },
-  //   { name: "Lucy Daniels", email: "lucy.daniels@example.com", role: "Member" },
-  //   { name: "Ayo Balogun", email: "ayo.balogun@example.com", role: "Member" },
-  //   { name: "Sophia King", email: "sophia.king@example.com", role: "Viewer" },
-  //   { name: "Tunde Adebayo", email: "tunde.adebayo@example.com", role: "Viewer" },
-  //   {
-  //     name: "Isabella Green",
-  //     email: "isabella.green@example.com",
-  //     role: "Admin",
-  //   },
-  //   { name: "Kelechi Obi", email: "kelechi.obi@example.com", role: "Viewer" },
-  //   { name: "Daniel White", email: "daniel.white@example.com", role: "Viewer" },
-  //   { name: "Ngozi Eze", email: "ngozi.eze@example.com", role: "Member" },
-  //   { name: "David Brown", email: "david.brown@example.com", role: "Member" },
-  //   { name: "Yetunde Ajayi", email: "yetunde.ajayi@example.com", role: "Member" },
-  //   { name: "Paul Harrison", email: "paul.harrison@example.com", role: "Admin" },
-  //   { name: "Ifeoma Anya", email: "ifeoma.anya@example.com", role: "Admin" },
+  {
+    id: 7,
+    name: "Lucy Daniels",
+    email: "lucy.daniels@example.com",
+    role: "Member",
+  },
+  {
+    id: 8,
+    name: "Ayo Balogun",
+    email: "ayo.balogun@example.com",
+    role: "Member",
+  },
+  {
+    id: 9,
+    name: "Sophia King",
+    email: "sophia.king@example.com",
+    role: "Viewer",
+  },
+  {
+    id: 10,
+    name: "Tunde Adebayo",
+    email: "tunde.adebayo@example.com",
+    role: "Viewer",
+  },
+  {
+    id: 11,
+    name: "Isabella Green",
+    email: "isabella.green@example.com",
+    role: "Admin",
+  },
+  {
+    id: 12,
+    name: "Kelechi Obi",
+    email: "kelechi.obi@example.com",
+    role: "Viewer",
+  },
+  {
+    id: 13,
+    name: "Daniel White",
+    email: "daniel.white@example.com",
+    role: "Viewer",
+  },
+  { id: 14, name: "Ngozi Eze", email: "ngozi.eze@example.com", role: "Member" },
+  {
+    id: 15,
+    name: "David Brown",
+    email: "david.brown@example.com",
+    role: "Member",
+  },
+  {
+    id: 16,
+    name: "Yetunde Ajayi",
+    email: "yetunde.ajayi@example.com",
+    role: "Member",
+  },
+  {
+    id: 17,
+    name: "Paul Harrison",
+    email: "paul.harrison@example.com",
+    role: "Admin",
+  },
+  {
+    id: 18,
+    name: "Ifeoma Anya",
+    email: "ifeoma.anya@example.com",
+    role: "Admin",
+  },
   // ];
 ];
 
@@ -73,6 +132,7 @@ const TeamMembers: FC = () => {
   const [memberToDelete, setMemberToDelete] = useState<
     (typeof dummyAssignees)[0] | null
   >(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const openModalHandler = () => {
     setModalOpen(true);
@@ -156,6 +216,21 @@ const TeamMembers: FC = () => {
     return matchedRoles && matchedSearchTerm;
   });
 
+  const totalPages = Math.ceil(filteredAssignees.length / MEMBERS_PER_PAGE);
+  const startIndex = (currentPage - 1) * MEMBERS_PER_PAGE;
+  const currentMembers = filteredAssignees.slice(
+    startIndex,
+    startIndex + MEMBERS_PER_PAGE
+  );
+
+  const nextPageHandler = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const previousPageHandler = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8">
       <div className="flex justify-between">
@@ -196,7 +271,7 @@ const TeamMembers: FC = () => {
           <p>Role</p>
           <p>Actions</p>
         </div>
-        {filteredAssignees.map((assignee, index) => (
+        {currentMembers.map((assignee, index) => (
           <div
             key={index}
             className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  text-white font-semibold"
@@ -234,6 +309,28 @@ const TeamMembers: FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="flex gap-6 items-center justify-center">
+        <button
+          onClick={previousPageHandler}
+          disabled={currentPage === 1}
+          className={`text-white flex items-center hover:text-[#d3a7f1] ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <ChevronLeft />
+          <span>Previous</span>
+        </button>
+        <span className="text-white">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={nextPageHandler}
+          disabled={currentPage === totalPages}
+          className={`text-white flex items-center hover:text-[#d3a7f1] ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <span>Next</span>
+          <ChevronRight />
+        </button>
       </div>
 
       <Modal
