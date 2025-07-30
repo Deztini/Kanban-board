@@ -46,7 +46,7 @@ const Home: FC = () => {
   const navigate = useNavigate();
   return (
     <div className="bg-black  min-h-screen">
-      <header className="w-full flex items-start justify-start">
+      <header className="w-full flex items-start justify-start cursor-pointer" onClick={() => navigate("/")}>
         <img className="w-40 h-auto" src={logo} alt="" />
       </header>
 

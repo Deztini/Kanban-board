@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   isNotEmpty,
   isEmail,
@@ -14,8 +15,11 @@ import {
 const Signup: FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const name = formData.get("fullName");
@@ -51,22 +55,25 @@ const Signup: FC = () => {
 
     const data = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
+      setIsLoading(false);
+
+      toast.success("Signup Successful");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } else {
+      setIsLoading(false);
       toast.error(data.message);
-      return;
+      console.log(data.message);
     }
-
-    toast.success("Signup Successful");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
   };
   return (
     <>
       <ToastContainer position="top-center" />
       <div className="bg-black h-screen flex justify-center items-center">
-        <div className="bg-[#121212] w-100 h-150 flex flex-col items-center p-4 rounded-xl shadow-2xl">
+        <div className="bg-[#121212]  border-1 border-solid border-[#3E3A45] w-100 h-150 flex flex-col items-center p-4 rounded-xl shadow-2xl">
           <h1 className="text-white text-2xl font-bold">Project Pulse</h1>
           <h2 className="text-white text-2xl font-bold">Create your account</h2>
           <p className="text-[#ccc] text-center">
@@ -118,8 +125,13 @@ const Signup: FC = () => {
               />
             </div>
 
-            <button className="bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-2 hover:bg-[#944fc5]">
-              SignUp
+            <button
+              className={`bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-1 hover:bg-[#944fc5] ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing In..." : "Sign Up"}
             </button>
           </form>
 

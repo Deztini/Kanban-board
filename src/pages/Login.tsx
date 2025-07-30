@@ -1,13 +1,16 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { isEmail, hasMinLength } from "../utils/validation";
 
 const Login: FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email");
     const password = formData.get("password");
@@ -33,21 +36,24 @@ const Login: FC = () => {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userName", data.name);
+      setIsLoading(false);
 
-       toast.success("Login Successful");
+      toast.success("Login Successful");
 
       setTimeout(() => {
         navigate("/projectpulse/dashboard");
-      }, 4000);
+      }, 1000);
     } else {
+      setIsLoading(false);
       toast.error(data.message);
       console.log(data.message);
     }
   };
   return (
     <>
+      <ToastContainer position="top-center" />
       <div className="bg-black h-screen flex justify-center items-center">
-        <div className="bg-[#121212] w-100 h-130 flex flex-col items-center px-4 py-3 rounded-xl shadow-2xl">
+        <div className="bg-[#121212] border-1 border-solid border-[#3E3A45]  w-100 h-130 flex flex-col items-center px-4 py-3 rounded-xl shadow-2xl">
           <h1 className="text-white text-2xl font-bold">Login</h1>
           <p className="text-[#ccc] text-center mt-4">
             Enter your credentails to access your account.
@@ -68,7 +74,7 @@ const Login: FC = () => {
             <div className="flex flex-col gap-2 mb-6">
               <label>Password</label>
               <input
-                className="bg-black px-4 py-2  focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+                className="bg-black px-4 py-2  focus:outline-none focus:bg-black active:bg-black autofill:bg-black active:outline-none border-b-gray-700 h-11 w-80 rounded"
                 type="password"
                 required
                 placeholder="Enter Password"
@@ -76,8 +82,13 @@ const Login: FC = () => {
               />
             </div>
 
-            <button className="bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5]">
-              Login
+            <button
+              className={`bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5] ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging In..." : "Login"}
             </button>
           </form>
 
