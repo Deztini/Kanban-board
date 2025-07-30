@@ -115,7 +115,7 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
 
             <p
               className={
-                priority === "high"
+                priority === "High"
                   ? "bg-[ #3C1F20] text-[#FF4C4C] rounded-3xl w-25 px-2 py-2"
                   : "text-white"
               }

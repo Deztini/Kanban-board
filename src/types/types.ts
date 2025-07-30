@@ -43,7 +43,6 @@ export type projectCardProps = {
   status: string;
   taskCompleted: number;
   targetTask: number;
-  statusColor: string;
   id: string;
 };
 
@@ -53,5 +52,4 @@ export type generalProjectProps = {
   status: string;
   taskCompleted: number;
   targetTask: number;
-  statusColor: string;
 };

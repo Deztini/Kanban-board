@@ -32,7 +32,7 @@ const Signup: FC = () => {
       return;
     }
 
-    if (!isEmail(email)) {
+    if (!isEmail(email) && !isNotEmpty(email)) {
       toast.error("Please enter a valid email");
       return;
     }

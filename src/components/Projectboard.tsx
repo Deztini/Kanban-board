@@ -5,6 +5,9 @@ import Modal from "./UI/Modal";
 import type { ProjectProps, taskProps } from "../types/types";
 import { TaskContext } from "../store/context/project-context";
 import { DraggableContext } from "../store/context/draggable-context";
+import { isNotEmpty } from "../utils/validation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   projectTitle,
@@ -36,6 +39,26 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     const priority = formData.get("priority") as string;
     const date = formData.get("date") as string;
 
+    if (!isNotEmpty(taskTitle)) {
+      toast.error("Please enter a task title");
+      return;
+    }
+
+    if (!isNotEmpty(assignee)) {
+      toast.error("Please enter an assignee name");
+      return;
+    }
+
+    if (!isNotEmpty(priority)) {
+      toast.error("Select the task priority, it is required");
+      return;
+    }
+
+    if (!isNotEmpty(date)) {
+      toast.error("Enter a due date for the task");
+      return;
+    }
+
     const newTask: taskProps = {
       id: Math.random(),
       title: taskTitle,
@@ -49,6 +72,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     taskCtx.setTasks((prevTask) => [...prevTask, { ...newTask }]);
 
     setModalOpen(false);
+    setLabels([""]);
   };
 
   const handleDrop = (targetBoardId: string) => {
@@ -80,6 +104,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
 
   return (
     <>
+      <ToastContainer position="top-center" />
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={() => handleDrop(boardId)}
@@ -87,7 +112,9 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
       >
         <div className="flex items-center justify-between">
           <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
-          <p className="w-9 h-9 rounded-full flex items-center justify-center bg-[#af74d7]/10 text-[#af74d7] font-semibold ">{boardTask.length}</p>
+          <p className="w-9 h-9 rounded-full flex items-center justify-center bg-[#af74d7]/10 text-[#af74d7] font-semibold ">
+            {boardTask.length}
+          </p>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -158,9 +185,9 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
                 <option value="" disabled>
                   Select priority
                 </option>
-                <option value="low">low</option>
-                <option value="high">high</option>
-                <option value="medium">medium</option>
+                <option value="Low">Low</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
               </select>
             </div>
 
@@ -171,7 +198,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
                 required
                 name="date"
                 placeholder="Pick a date"
-                className=" bg-black h-[35px] rounded px-4 py-4 text-white "
+                className=" bg-black h-[35px] rounded px-4 text-white "
               />
             </div>
 

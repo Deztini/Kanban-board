@@ -8,6 +8,10 @@ import {
 import type { FC } from "react";
 import { useState } from "react";
 import Modal from "./UI/Modal";
+import { isNotEmpty, isEmail } from "../utils/validation";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MEMBERS_PER_PAGE = 6;
 
@@ -153,6 +157,21 @@ const TeamMembers: FC = () => {
     const email = formData.get("email") as string;
     const role = formData.get("role") as string;
 
+    if (!isNotEmpty(name)) {
+      toast.error("Name is required");
+      return;
+    }
+
+    if (!isEmail(email) && !isNotEmpty(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    if (!isNotEmpty(role)) {
+      toast.error("Please select a role");
+      return;
+    }
+
     if (edit && currentMember) {
       const updatedMembers = teamMembers.map((member) =>
         member.id === currentMember.id
@@ -232,198 +251,210 @@ const TeamMembers: FC = () => {
   };
 
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8">
-      <div className="flex justify-between">
-        <h1 className="text-white text-3xl font-bold">Team Members</h1>
-        <div className="flex gap-8 items-center">
-          <input
-            className={`bg-[#374151] px-3 py-2 rounded-[8px] text-[#ccc] focus:outline-none border-2 ${
-              searchTerm.trim() ? "border-[#8b5cf6]" : "border-transparent"
-            } `}
-            type="search"
-            placeholder="Search members..."
-            onChange={searchHandler}
-            value={searchTerm}
-          />
-          <select
-            className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
-            onChange={filterHandler}
-            value={roles}
-          >
-            <option>Filter by roles</option>
-            <option>Admin</option>
-            <option>Viewer</option>
-            <option>Member</option>
-          </select>
+    <>
+      <ToastContainer position="top-center" />
+      <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8">
+        <div className="flex justify-between">
+          <h1 className="text-white text-3xl font-bold">Team Members</h1>
+          <div className="flex gap-8 items-center">
+            <input
+              className={`bg-[#374151] px-3 py-2 rounded-[8px] text-[#ccc] focus:outline-none border-2 ${
+                searchTerm.trim() ? "border-[#8b5cf6]" : "border-transparent"
+              } `}
+              type="search"
+              placeholder="Search members..."
+              onChange={searchHandler}
+              value={searchTerm}
+            />
+            <select
+              className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+              onChange={filterHandler}
+              value={roles}
+            >
+              <option>Filter by roles</option>
+              <option>Admin</option>
+              <option>Viewer</option>
+              <option>Member</option>
+            </select>
+            <button
+              className="flex gap-2 bg-[#af74d7] text-white rounded-[8px] w-[165px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5]"
+              onClick={openModalHandler}
+            >
+              <Plus /> Add Members
+            </button>
+          </div>
+        </div>
+
+        <div className="my-6 mx-4 w-[97%] border-2 border-solid border-[#ccc] px-4 py-4 h-[80%] rounded-[8px]">
+          <div className="grid grid-cols-4 text-[#ccc] font-semibold">
+            <p>Name</p>
+            <p>Email</p>
+            <p>Role</p>
+            <p>Actions</p>
+          </div>
+          {currentMembers.map((assignee, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  text-white font-semibold"
+            >
+              <p>{assignee.name}</p>
+              <p>{assignee.email}</p>
+
+              <p
+                className={
+                  assignee.role === "Admin"
+                    ? "bg-blue-800/25 text-blue-800 rounded-[25px] py-2 px-4 w-25 text-center"
+                    : assignee.role === "Member"
+                    ? "bg-green-800/25 text-green-800 rounded-[25px] py-3 px-4 w-25 text-center"
+                    : "bg-black/35 text-white rounded-[25px] py-3 px-4 w-25 text-center"
+                }
+              >
+                {assignee.role}
+              </p>
+              <div className="flex gap-16 items-center">
+                <button
+                  onClick={() => editHandler(assignee)}
+                  className="cursor-pointer"
+                >
+                  <SquarePen color="gray" />
+                </button>
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setMemberToDelete(assignee);
+                    setDeleteModal(true);
+                  }}
+                >
+                  <Trash color="red" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-6 items-center justify-center">
           <button
-            className="flex gap-2 bg-[#af74d7] text-white rounded-[8px] w-[165px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5]"
-            onClick={openModalHandler}
+            onClick={previousPageHandler}
+            disabled={currentPage === 1}
+            className={`text-white flex items-center hover:text-[#d3a7f1] ${
+              currentPage === 1
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
           >
-            <Plus /> Add Members
+            <ChevronLeft />
+            <span>Previous</span>
+          </button>
+          <span className="text-white">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={nextPageHandler}
+            disabled={currentPage === totalPages}
+            className={`text-white flex items-center hover:text-[#d3a7f1] ${
+              currentPage === totalPages
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            <span>Next</span>
+            <ChevronRight />
           </button>
         </div>
-      </div>
 
-      <div className="my-6 mx-4 w-[97%] border-2 border-solid border-[#ccc] px-4 py-4 h-[80%] rounded-[8px]">
-        <div className="grid grid-cols-4 text-[#ccc] font-semibold">
-          <p>Name</p>
-          <p>Email</p>
-          <p>Role</p>
-          <p>Actions</p>
-        </div>
-        {currentMembers.map((assignee, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  text-white font-semibold"
-          >
-            <p>{assignee.name}</p>
-            <p>{assignee.email}</p>
+        <Modal
+          title={edit ? "Edit Team Member" : "Add New Team Members"}
+          subtitle={
+            edit
+              ? "Update the details below to modify a team member."
+              : "Fill in the details below to create a new member."
+          }
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          width="w-[380px]"
+          height="h-[480px]"
+        >
+          <form className="flex flex-col gap-4" onSubmit={submitHandler}>
+            <div className="flex flex-col gap-2">
+              <label className="text-white">Name</label>
+              <input
+                type="text"
+                required
+                placeholder="Mike Sam"
+                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                name="name"
+                defaultValue={edit && currentMember ? currentMember.name : ""}
+              />
+            </div>
 
-            <p
-              className={
-                assignee.role === "Admin"
-                  ? "bg-blue-800/25 text-blue-800 rounded-[25px] py-2 px-4 w-25 text-center"
-                  : assignee.role === "Member"
-                  ? "bg-green-800/25 text-green-800 rounded-[25px] py-3 px-4 w-25 text-center"
-                  : "bg-black/35 text-white rounded-[25px] py-3 px-4 w-25 text-center"
-              }
-            >
-              {assignee.role}
-            </p>
-            <div className="flex gap-16 items-center">
-              <button
-                onClick={() => editHandler(assignee)}
-                className="cursor-pointer"
+            <div className="flex flex-col gap-2">
+              <label className="text-white">Email</label>
+              <input
+                type="email"
+                required
+                placeholder="mikesam@gmail.com"
+                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                name="email"
+                defaultValue={edit && currentMember ? currentMember.email : ""}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-white">Role</label>
+              <select
+                className="bg-black h-[40px] text-white px-4 py-2"
+                defaultValue={edit && currentMember ? currentMember.role : ""}
+                name="role"
+                required
               >
-                <SquarePen color="gray" />
+                <option value="" disabled>
+                  Select Role
+                </option>
+                <option value="Admin">Admin</option>
+                <option value="Member">Member</option>
+                <option value="Viewer">Viewer</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end gap-12 mt-2">
+              <button
+                onClick={handleCloseModal}
+                className="text-white cursor-pointer"
+              >
+                Cancel
               </button>
-              <button
-                className="cursor-pointer"
-                onClick={() => {
-                  setMemberToDelete(assignee);
-                  setDeleteModal(true);
-                }}
-              >
-                <Trash color="red" />
+              <button className="bg-[#af74d7] text-white rounded-xl w-auto h-auto py-2 px-4 cursor-pointer hover:bg-[#c885f5]">
+                {edit ? "Update Member" : "Create Member"}
               </button>
             </div>
-          </div>
-        ))}
-      </div>
+          </form>
+        </Modal>
 
-      <div className="flex gap-6 items-center justify-center">
-        <button
-          onClick={previousPageHandler}
-          disabled={currentPage === 1}
-          className={`text-white flex items-center hover:text-[#d3a7f1] ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        <Modal
+          title="Delete Team Member"
+          subtitle="This action cannot be undone. Are you sure you want to remove this member from the team?"
+          width="w-[380px]"
+          height="h-auto"
+          isOpen={deleteModal}
+          onClose={() => setDeleteModal(false)}
         >
-          <ChevronLeft />
-          <span>Previous</span>
-        </button>
-        <span className="text-white">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={nextPageHandler}
-          disabled={currentPage === totalPages}
-          className={`text-white flex items-center hover:text-[#d3a7f1] ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-        >
-          <span>Next</span>
-          <ChevronRight />
-        </button>
-      </div>
-
-      <Modal
-        title={edit ? "Edit Team Member" : "Add New Team Members"}
-        subtitle={
-          edit
-            ? "Update the details below to modify a team member."
-            : "Fill in the details below to create a new member."
-        }
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        width="w-[380px]"
-        height="h-[480px]"
-      >
-        <form className="flex flex-col gap-4" onSubmit={submitHandler}>
-          <div className="flex flex-col gap-2">
-            <label className="text-white">Name</label>
-            <input
-              type="text"
-              required
-              placeholder="Mike Sam"
-              className="bg-black h-[35px] rounded px-4 py-4 text-white"
-              name="name"
-              defaultValue={edit && currentMember ? currentMember.name : ""}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-white">Email</label>
-            <input
-              type="email"
-              required
-              placeholder="mikesam@gmail.com"
-              className="bg-black h-[35px] rounded px-4 py-4 text-white"
-              name="email"
-              defaultValue={edit && currentMember ? currentMember.email : ""}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-white">Role</label>
-            <select
-              className="bg-black h-[40px] text-white px-4 py-2"
-              defaultValue={edit && currentMember ? currentMember.role : ""}
-              name="role"
-            >
-              <option value="" disabled>
-                Select Role
-              </option>
-              <option value="Admin">Admin</option>
-              <option value="Member">Member</option>
-              <option value="Viewer">Viewer</option>
-            </select>
-          </div>
-
-          <div className="flex justify-end gap-12 mt-2">
+          <div className="flex justify-end gap-4 mt-6">
             <button
-              onClick={handleCloseModal}
-              className="text-white cursor-pointer"
+              onClick={cancelDelete}
+              className="text-white px-4 py-2 rounded hover:bg-[#333] cursor-pointer"
             >
               Cancel
             </button>
-            <button className="bg-[#af74d7] text-white rounded-xl w-auto h-auto py-2 px-4 cursor-pointer hover:bg-[#c885f5]">
-              {edit ? "Update Member" : "Create Member"}
+            <button
+              onClick={deleteHandler}
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+            >
+              Delete
             </button>
           </div>
-        </form>
-      </Modal>
-
-      <Modal
-        title="Delete Team Member"
-        subtitle="This action cannot be undone. Are you sure you want to remove this member from the team?"
-        width="w-[380px]"
-        height="h-auto"
-        isOpen={deleteModal}
-        onClose={() => setDeleteModal(false)}
-      >
-        <div className="flex justify-end gap-4 mt-6">
-          <button
-            onClick={cancelDelete}
-            className="text-white px-4 py-2 rounded hover:bg-[#333] cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={deleteHandler}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
-          >
-            Delete
-          </button>
-        </div>
-      </Modal>
-    </div>
+        </Modal>
+      </div>
+    </>
   );
 };
 

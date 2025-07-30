@@ -1,7 +1,7 @@
 import { useState, type FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { isEmail, hasMinLength } from "../utils/validation";
+import { isEmail, hasMinLength, isNotEmpty } from "../utils/validation";
 
 const Login: FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -15,7 +15,7 @@ const Login: FC = () => {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    if (!isEmail(email)) {
+    if (!isEmail(email) && !isNotEmpty(email)) {
       toast.error("Please enter a valid email");
       return;
     }

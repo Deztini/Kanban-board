@@ -1,18 +1,27 @@
 import type { FC } from "react";
 import Projectboard from "../components/Projectboard";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 const Mainboard: FC = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   // const name = localStorage.getItem("userName");
 
   return (
     <>
       <div className="min-h-screen bg-black px-8 py-12">
-        <h1 className="text-white text-3xl mb-2 text-center">
-          {params.projectId} PROJECT BOARD
-        </h1>
+        <div className="flex gap-74 items-center">
+          <button onClick={() => navigate(-1)} className="text-white bg-[#af74d7] hover:bg-[#c885f5] rounded-lg px-4 py-2 font-medium flex items-center cursor-pointer">
+            <ChevronLeft />
+            <span>Back To All Projects</span>
+          </button>
+          <h1 className="text-white text-3xl mb-2 text-center">
+            {params.projectId?.toUpperCase()} PROJECT BOARD
+          </h1>
+        </div>
+
         <p className="text-[#ccc] text-center">
           {" "}
           Manage your project tasks efficiently with drag-and-drop

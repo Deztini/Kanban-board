@@ -36,3 +36,17 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: #fff !important;
 }
 
+input:focus,
+input:active,
+select:focus,
+select:active,
+textarea:focus,
+textarea:active {
+  outline: none;
+}
+
+input[type="date"] {
+  background-color: #fff;
+  color: #000;
+  color-scheme: light; 
+}
