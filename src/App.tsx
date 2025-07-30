@@ -9,6 +9,7 @@ import RootLayout from "./pages/Root";
 import Dashboard from "./pages/Dashboard";
 import ProjectsPage from "./pages/Projects";
 import TeamManagement from "./pages/TeamManagement";
+import CalendarPage from "./pages/Calendar";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,7 +31,11 @@ function App() {
         {
           path: "/projectpulse/teams",
           element: <TeamManagement />
-        }
+        },
+         {
+          path: "/projectpulse/calendar",
+          element: <CalendarPage />
+        },
       ],
     },
     {
