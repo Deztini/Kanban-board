@@ -43,7 +43,7 @@ export type projectCardProps = {
   status: string;
   taskCompleted: number;
   targetTask: number;
-  id: string;
+  id: number;
 };
 
 export type generalProjectProps = {

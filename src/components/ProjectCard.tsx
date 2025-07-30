@@ -2,6 +2,7 @@ import type { FC } from "react";
 import type { projectCardProps } from "../types/types";
 import { useNavigate } from "react-router-dom";
 
+
 const ProjectCard: FC<projectCardProps> = ({
   title,
   description,
@@ -11,13 +12,15 @@ const ProjectCard: FC<projectCardProps> = ({
   id,
 }) => {
   const navigate = useNavigate();
+
+ 
   const progressValue = Math.floor((taskCompleted / targetTask) * 100);
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[300px] h-auto px-6 py-4 rounded-xl">
       <div className="flex justify-between mb-2">
         <h1 className="text-xl font-bold text-white">{title}</h1>
         <p
-          className={`rounded-2xl  px-3 py-2 text-center  text-white  ${
+          className={`rounded-2xl  px-3 py-1 flex justify-center items-center h-auto w-auto  text-white  ${
             status === "On Hold" ? "bg-[#8A5C1E]/60" : status === "Active" ? "bg-[#2B50E3]/65" : "bg-green-500/35"
           } `}
         >

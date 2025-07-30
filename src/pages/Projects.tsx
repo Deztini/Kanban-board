@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "../components/UI/Card";
 import { ClipboardList, Plus } from "lucide-react";
 import { Activity } from "lucide-react";
@@ -13,11 +13,23 @@ import type { generalProjectProps } from "../types/types";
 import { isNotEmpty } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchProjects, storeProjects } from "../utils/http";
 
 const ProjectsPage: FC = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
   const [projects, setProjects] = useState<generalProjectProps[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await fetchProjects();
+      if (data) {
+        setProjects(data);
+      }
+    };
+    loadData();
+  }, []);
+
   const openModalHandler = () => {
     setModalOpen(true);
   };
@@ -26,7 +38,9 @@ const ProjectsPage: FC = () => {
     setModalOpen(false);
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  let id: number;
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -64,7 +78,9 @@ const ProjectsPage: FC = () => {
       targetTask,
     };
 
-    setProjects((prevProjects) => [...prevProjects, newProject]);
+    // setProjects((prevProjects) => [...prevProjects, newProject]);
+    id = await storeProjects(newProject);
+
     setModalOpen(false);
   };
 
@@ -83,7 +99,7 @@ const ProjectsPage: FC = () => {
           description={proj.description}
           targetTask={proj.targetTask}
           taskCompleted={proj.taskCompleted}
-          id={proj.title}
+          id={id}
         />
       ))}
     </div>
