@@ -48,5 +48,20 @@ textarea:active {
 input[type="date"] {
   background-color: #fff;
   color: #000;
-  color-scheme: light; 
+  color-scheme: light;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #af74d7;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

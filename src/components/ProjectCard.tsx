@@ -17,10 +17,10 @@ const ProjectCard: FC<projectCardProps> = ({
   const progressValue = Math.floor((taskCompleted / targetTask) * 100);
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[300px] h-auto px-6 py-4 rounded-xl">
-      <div className="flex justify-between mb-2">
-        <h1 className="text-xl font-bold text-white">{title}</h1>
+      <div className="flex justify-between items-start gap-1 mb-2">
+        <h1 className="text-[20px] font-bold text-white">{title}</h1>
         <p
-          className={`rounded-2xl  px-3 py-1 flex justify-center items-center h-auto w-auto  text-white  ${
+          className={`rounded-2xl  px-3 py-1 max-h-12 text-center text-sm font-semibold inline-block text-white  ${
             status === "On Hold" ? "bg-[#8A5C1E]/60" : status === "Active" ? "bg-[#2B50E3]/65" : "bg-green-500/35"
           } `}
         >

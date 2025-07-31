@@ -14,11 +14,13 @@ import { isNotEmpty } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchProjects, storeProjects } from "../utils/http";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const ProjectsPage: FC = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
   const [projects, setProjects] = useState<generalProjectProps[]>([]);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -26,6 +28,7 @@ const ProjectsPage: FC = () => {
       if (data) {
         setProjects(data);
       }
+      setIsFetching(false);
     };
     loadData();
   }, []);
@@ -42,6 +45,8 @@ const ProjectsPage: FC = () => {
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setIsFetching(true);
 
     const formData = new FormData(e.currentTarget);
     const projectTitle = formData.get("projectTitle") as string;
@@ -78,10 +83,16 @@ const ProjectsPage: FC = () => {
       targetTask,
     };
 
-    // setProjects((prevProjects) => [...prevProjects, newProject]);
-    id = await storeProjects(newProject);
-
-    setModalOpen(false);
+    try {
+      setModalOpen(false);
+      id = await storeProjects(newProject);
+      const updatedProjects = await fetchProjects();
+      setProjects(updatedProjects);
+    } catch (error) {
+      toast.error("Failed to create project");
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   const filteredProjects =
@@ -89,23 +100,11 @@ const ProjectsPage: FC = () => {
       ? projects
       : projects.filter((proj) => proj.status === selectedType);
 
-  let content = (
-    <div className="flex gap-12 flex-wrap mt-6">
-      {filteredProjects.map((proj, index) => (
-        <ProjectCard
-          key={index}
-          title={proj.title}
-          status={proj.status}
-          description={proj.description}
-          targetTask={proj.targetTask}
-          taskCompleted={proj.taskCompleted}
-          id={id}
-        />
-      ))}
-    </div>
-  );
+  let content;
 
-  if (projects.length === 0) {
+  if (isFetching) {
+    content = <LoadingSpinner />;
+  } else if (projects.length === 0) {
     content = (
       <div className="flex flex-col items-center justify-center text-center text-white mt-10">
         <FolderPlus className="w-12 h-12 text-gray-400 mb-4" />
@@ -113,6 +112,22 @@ const ProjectsPage: FC = () => {
         <p className="text-xl text-gray-400">
           Click the "Create New Project" button to get started.
         </p>
+      </div>
+    );
+  } else {
+    content = (
+      <div className="flex gap-12 flex-wrap mt-6">
+        {filteredProjects.map((proj, index) => (
+          <ProjectCard
+            key={index}
+            title={proj.title}
+            status={proj.status}
+            description={proj.description}
+            targetTask={proj.targetTask}
+            taskCompleted={proj.taskCompleted}
+            id={id}
+          />
+        ))}
       </div>
     );
   }
