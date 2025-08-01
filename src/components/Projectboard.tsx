@@ -17,7 +17,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   borderColors,
   boardId,
 }) => {
-  const {tasks, setTasks} = useContext(TaskContext);
+  const { tasks, setTasks } = useContext(TaskContext);
   const dragCtx = useContext(DraggableContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [labels, setLabels] = useState<string[]>([""]);
@@ -26,6 +26,8 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   const params = useParams();
 
   useEffect(() => {
+    setTasks([]);
+
     const loadData = async () => {
       const data = await fetchTask(params.projectId);
       if (data) {
@@ -70,7 +72,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
       assignee,
       date,
       priority,
-      boardId,
+      boardId: boardId,
       label: labels,
     };
 
@@ -90,7 +92,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     setLabels([""]);
   };
 
-  const handleDrop = async(targetBoardId: string) => {
+  const handleDrop = async (targetBoardId: string) => {
     if (!dragCtx.draggableTask) return;
 
     const draggedTask = dragCtx.draggableTask.task;
@@ -100,18 +102,15 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     //  setTasks((prevTask) =>
     //   prevTask.map((t) => (t.id === draggedTask.id ? updatedTask : t))
     // );
-   
-    try {
-    dragCtx.setDraggableTask(null);
-    await updateTask(updatedTask, params.projectId, draggedTask.id, "PATCH" );
 
-    
+    try {
+      dragCtx.setDraggableTask(null);
+      await updateTask(updatedTask, params.projectId, draggedTask.id, "PATCH");
+
       const data = await fetchTask(params.projectId);
       setTasks(data);
-    
-
     } catch (error) {
-      console.log("Failed to drop the task on the board",error);
+      console.log("Failed to drop the task on the board", error);
     }
   };
 
@@ -144,7 +143,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
         </div>
 
         <div className="flex flex-col gap-3">
-          {boardTask.length > 0 ? (
+          {!isFetching && boardTask.length > 0 ? (
             boardTask.map((t) => (
               <Task key={t.id} id={t.id} boardId={t.boardId} />
             ))

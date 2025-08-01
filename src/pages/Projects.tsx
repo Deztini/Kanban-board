@@ -68,17 +68,12 @@ const ProjectsPage: FC = () => {
       return;
     }
 
-    if (+targetTask === 0) {
-      toast.error("Set a target task greater than 0 to proceed.");
-      return;
-    }
+  
 
     const newProject: generalProjectProps = {
       title: projectTitle,
       description,
       status,
-      taskCompleted,
-      targetTask,
     };
 
     try {
@@ -97,6 +92,12 @@ const ProjectsPage: FC = () => {
     selectedType === "All"
       ? projects
       : projects.filter((proj) => proj.status === selectedType);
+
+  const activeProjects = projects.filter((proj) => proj.status === "Active");
+  const completedProjects = projects.filter(
+    (proj) => proj.status === "Completed"
+  );
+  const archivedProjects = projects.filter((proj) => proj.status === "On Hold");
 
   let content;
 
@@ -121,8 +122,6 @@ const ProjectsPage: FC = () => {
             title={proj.title}
             status={proj.status}
             description={proj.description}
-            targetTask={proj.targetTask}
-            taskCompleted={proj.taskCompleted}
             id={proj.id}
           />
         ))}
@@ -148,28 +147,28 @@ const ProjectsPage: FC = () => {
         <div className="flex gap-4 mt-8">
           <Card
             title="All Projects"
-            value={10}
+            value={projects.length}
             description="Total projects managed"
             icon={ClipboardList}
             iconColor="yellow"
           />
           <Card
             title="Active Projects"
-            value={7}
+            value={activeProjects.length}
             description="Currently in  progress"
             icon={Activity}
             iconColor="yellow"
           />
           <Card
             title="Projects Completed"
-            value={2}
+            value={completedProjects.length}
             description="Successfully delivered"
             icon={ListChecks}
             iconColor="yellow"
           />
           <Card
             title="Archived Projects"
-            value={2}
+            value={archivedProjects.length}
             description="Historical records"
             icon={Archive}
             iconColor="yellow"
@@ -246,30 +245,6 @@ const ProjectsPage: FC = () => {
                 <option>Completed</option>
                 <option>On Hold</option>
               </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-white">Target Task</label>
-              <input
-                type="number"
-                required
-                placeholder=""
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
-                name="targetTask"
-                defaultValue={0}
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-white">Task Completed</label>
-              <input
-                type="number"
-                required
-                placeholder=""
-                defaultValue={0}
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
-                name="taskCompleted"
-              />
             </div>
 
             <div className="flex justify-end gap-12 mt-8">

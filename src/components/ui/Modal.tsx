@@ -25,11 +25,9 @@ const Modal: FC<ModalProps> = ({
     <>
       <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center py-8">
         <div
-          className={`bg-[#121212] ${width} ${height} rounded-2xl px-4 py-4 relative flex flex-col  `}
+          className={`bg-[#121212] ${width} ${height} border-[#3E3A45] border-2 border-solid shadow-2xl rounded-2xl px-4 py-6 relative flex flex-col  `}
         >
-          <h2 className="text-white text-center text-2xl mt-5 mb-2">
-            {title}
-          </h2>
+          <h2 className="text-white text-center text-2xl mt-5 mb-2">{title}</h2>
           <h1 className="text-center text-[#ccc] text-xs mb-4">{subtitle}</h1>
           <div className="overflow-y-auto px-8 flex-1">{children}</div>
 
