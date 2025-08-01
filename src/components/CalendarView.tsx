@@ -1,26 +1,10 @@
 import dayjs from "dayjs";
 import { useState, type FC } from "react";
+import type { projectCardProps, taskProps } from "../types/types";
 
-type Task = {
-  id: string;
-  title: string;
-  date: string; // ISO format: "2025-07-25"
-  projectId: string;
-  status: string;
-  priority: string;
-};
 
-type Project = {
-  id: string;
-  name: string;
-};
 
-interface CalendarViewProps {
-  tasks: Task[];
-  projects: Project[];
-}
-
-const CalendarView: FC<CalendarViewProps> = ({ tasks, projects }) => {
+const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const startOfMonth = currentMonth.startOf("month").startOf("week");
   const endOfMonth = currentMonth.endOf("month").endOf("week");
@@ -34,10 +18,10 @@ const CalendarView: FC<CalendarViewProps> = ({ tasks, projects }) => {
   }
   return (
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid p-4 rounded-xl text-white mt-12">
-      <div className="flex justify-end items-center">
-        {/* <h2 className="text-xl font-bold">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">
           Project Calendar - {currentMonth.format("MMMM YYYY")}
-        </h2> */}
+        </h2>
         <div className="space-x-8">
           <button
             onClick={() => setCurrentMonth(currentMonth.subtract(1, "month"))}
@@ -76,14 +60,14 @@ const CalendarView: FC<CalendarViewProps> = ({ tasks, projects }) => {
             <div
               key={date.toString()}
               className={`h-28 border p-1 rounded-lg ${
-                date.month() !== currentMonth.month() ? "text-gray-500" : ""
+                date.month() !== currentMonth.month() ? "text-[#ccc]" : ""
               }`}
             >
               <div className="text-sm font-bold">{date.date()}</div>
               {dailyTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="mt-1 text-xs bg-blue-600 rounded px-1 truncate"
+                  className="mt-1 text-xs bg-blue-600 rounded px-4 h-auto "
                   title={task.title}
                 >
                   {task.title}

@@ -1,5 +1,7 @@
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import CalendarView from "../components/CalendarView";
+import { fetchProjects, fetchTask } from "../utils/http";
+import type { projectCardProps, taskProps } from "../types/types";
 
 // Example project list
 export const projectsData = [
@@ -29,6 +31,38 @@ export const tasksData = [
 ];
 
 const CalendarPage: FC = () => {
+  const [projects, setProjects] = useState<projectCardProps[]>();
+  const [tasks, setTasks] = useState<taskProps[]>();
+
+  useEffect(() => {
+    const fetchedProjects = async () => {
+      const loadedProject = await fetchProjects();
+      setProjects(loadedProject);
+    };
+    fetchedProjects();
+  }, []);
+
+  useEffect(() => {
+    const handleTask = async () => {
+      const allTask: taskProps[] = [];
+
+      for (const proj of projects) {
+        const loadedTask = await fetchTask(proj.id);
+        const taskArray = loadedTask
+          ? Object.entries(loadedTask).map(([id, task]) => ({
+              id,
+              ...task,
+            }))
+          : [];
+        allTask.push(...taskArray);
+      }
+
+      setTasks(allTask);
+    };
+    if (projects?.length > 0) {
+      handleTask();
+    }
+  }, [projects]);
   return (
     <div>
       <h1 className="text-white text-3xl font-bold mb-2 ">Project Calendar</h1>
@@ -82,7 +116,7 @@ const CalendarPage: FC = () => {
         </select>
       </div>
 
-      <CalendarView tasks={tasksData} projects={projectsData} />
+      {tasks && projects && <CalendarView tasks={tasks} projects={projects} />}
     </div>
   );
 };
