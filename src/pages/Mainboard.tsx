@@ -1,24 +1,47 @@
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import Projectboard from "../components/Projectboard";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
+const BACKEND_API = import.meta.env.VITE_BACKEND_URL;
+
 const Mainboard: FC = () => {
+  const [project, setProject] = useState();
   const params = useParams();
   const navigate = useNavigate();
 
-  // const name = localStorage.getItem("userName");
+  useEffect(() => {
+    const fetchSpecificProject = async () => {
+      try {
+        const response = await fetch(
+          BACKEND_API + `projects/${params.projectId}.json`
+        );
+        const data = await response.json();
+        setProject(data);
+      } catch (error) {
+        console.log("Failed to fetch data", error);
+      }
+    };
+    fetchSpecificProject();
+  }, []);
 
   return (
     <>
       <div className="min-h-screen bg-black px-8 py-12">
         <div className="flex gap-74 items-center">
-          <button onClick={() => navigate(-1)} className="text-white bg-[#af74d7] hover:bg-[#c885f5] rounded-lg px-4 py-2 font-medium flex items-center cursor-pointer">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-white bg-[#af74d7] hover:bg-[#c885f5] rounded-lg px-4 py-2 font-medium flex items-center cursor-pointer"
+          >
             <ChevronLeft />
             <span>Back To All Projects</span>
           </button>
-          <h1 className="text-white text-3xl mb-2 text-center">
-            {params.projectId?.toUpperCase()} PROJECT BOARD
+          <h1 className="text-white text-3xl mb-2 text-center uppercase">
+            {!project ? (
+              "loading project..."
+            ) : (
+              `${project?.title.toUpperCase()} project board`
+            )}
           </h1>
         </div>
 

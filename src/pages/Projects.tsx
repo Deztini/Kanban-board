@@ -41,8 +41,6 @@ const ProjectsPage: FC = () => {
     setModalOpen(false);
   };
 
-  let id: number;
-
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -85,7 +83,7 @@ const ProjectsPage: FC = () => {
 
     try {
       setModalOpen(false);
-      id = await storeProjects(newProject);
+      await storeProjects(newProject);
       const updatedProjects = await fetchProjects();
       setProjects(updatedProjects);
     } catch (error) {
@@ -125,7 +123,7 @@ const ProjectsPage: FC = () => {
             description={proj.description}
             targetTask={proj.targetTask}
             taskCompleted={proj.taskCompleted}
-            id={id}
+            id={proj.id}
           />
         ))}
       </div>

@@ -8,27 +8,75 @@ import {
   PlusIcon,
   Minus,
 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import Modal from "./UI/Modal";
 import { TaskContext } from "../store/context/project-context";
 import { DraggableContext } from "../store/context/draggable-context";
+import { useParams } from "react-router-dom";
+import { deleteTask, fetchTask, updateTask } from "../utils/http";
 
 const Task: FC<taskProps> = ({ id, boardId }) => {
-  const taskCtx = useContext(TaskContext);
+  const params = useParams();
+  const {tasks, setTasks} = useContext(TaskContext);
   const dragCtx = useContext(DraggableContext);
   const [isClicked, setIsClicked] = useState<boolean>();
   const [edit, setEdit] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [isDeleted, setIsDeleted] = useState(false);
 
-  const specificTask = taskCtx.tasks.find((t) => t.id === id);
-  if (!specificTask) return null;
+  const [editTitle, setEditTitle] = useState("");
+  const [editAssignee, setEditAssignee] = useState("");
+  const [editPriority, setEditPriority] = useState("");
+  const [editDate, setEditDate] = useState("");
+  const [editLabel, setEditLabel] = useState<string[]>([]);
 
-  const { title, assignee, date, priority, label } = specificTask;
+  const fetchTaskData = useCallback(async () => {
+    const data = await fetchTask(params.projectId);
+    if (data) {
+      setTasks(data);
+    }
+    setIsFetching(false);
+  }, [params.projectId, setTasks]);
 
-  const [editTitle, setEditTitle] = useState(title);
-  const [editAssignee, setEditAssignee] = useState(assignee);
-  const [editPriority, setEditPriority] = useState(priority);
-  const [editDate, setEditDate] = useState(date);
-  const [editLabel, setEditLabel] = useState<string[]>(label);
+  useEffect(() => {
+    fetchTaskData();
+  }, [params.projectId, fetchTaskData]);
+
+  const specificTask = tasks.find((t) => t.id === id);
+
+  useEffect(() => {
+    if (specificTask) {
+      setEditTitle(specificTask.title);
+      setEditAssignee(specificTask.assignee);
+      setEditDate(specificTask.date);
+      setEditPriority(specificTask.priority);
+      setEditLabel(specificTask.label);
+    }
+  }, [specificTask]);
+
+  useEffect(() => {
+    const editTask = tasks.find((task) => task.id === id);
+
+    if (editTask) {
+      setEditTitle(editTask.title);
+      setEditAssignee(editTask.assignee);
+      setEditPriority(editTask.priority);
+      setEditDate(editTask.date);
+      setEditLabel(editTask.label);
+    }
+  }, [edit, id, tasks]);
+
+  const { title, assignee, date, priority, label } = specificTask ?? {
+    title: "",
+    assignee: "",
+    date: "",
+    priority: "",
+    label: [],
+  };
+
+  if (!specificTask && !isDeleted) {
+    return <div className="text-white text-center">Loading Task...</div>;
+  }
 
   function toggleOverlay() {
     setIsClicked((prev) => !prev);
@@ -42,23 +90,10 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
     setEdit(false);
   };
 
-  useEffect(() => {
-    const editTask = taskCtx.tasks.find((task) => task.id === id);
-
-    if (editTask) {
-      setEditTitle(editTask.title);
-      setEditAssignee(editTask.assignee);
-      setEditPriority(editTask.priority);
-      setEditDate(editTask.date);
-      setEditLabel(editTask.label);
-    }
-  }, [edit, id, taskCtx.tasks]);
-
-  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const updatedTask: taskProps = {
-      id,
       title: editTitle,
       assignee: editAssignee,
       date: editDate,
@@ -67,16 +102,24 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
       boardId,
     };
 
-    taskCtx.setTasks((prevTask) =>
-      prevTask.map((task) => (task.id === id ? updatedTask : task))
-    );
+    // setTask((prevTask) =>
+    //   prevTask.map((task) => (task.id === id ? updatedTask : task))
+    // );
 
-    setEdit(false);
-    setIsClicked(false);
+    try {
+      setEdit(false);
+      setIsClicked(false);
+      await updateTask(updatedTask, params.projectId, id, "PUT");
+      await fetchTaskData();
+    } catch (error) {
+      console.log("Failed to update task", error);
+    }
   };
 
-  const handleDelete = (id: number) => {
-    taskCtx.setTasks((prevTask) => prevTask.filter((t) => t.id !== id));
+  const handleDelete = async (id: string | undefined) => {
+    setTasks((prevTask) => prevTask.filter((t) => t.id !== id));
+    setIsDeleted(true);
+    await deleteTask(params.projectId, id);
   };
 
   const handleDrag = (task: taskProps) => {

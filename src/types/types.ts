@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
 export type taskProps = {
-  id: number;
+  id?: string;
   title: string;
   assignee: string;
   date: string;

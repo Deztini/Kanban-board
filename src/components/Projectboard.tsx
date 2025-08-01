@@ -1,4 +1,4 @@
-import { useState, type FC, useContext } from "react";
+import { useState, type FC, useContext, useEffect } from "react";
 import Task from "./Task";
 import { Plus, PlusIcon } from "lucide-react";
 import Modal from "./UI/Modal";
@@ -8,19 +8,35 @@ import { DraggableContext } from "../store/context/draggable-context";
 import { isNotEmpty } from "../utils/validation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchTask, updateTask } from "../utils/http";
+import { storeTask } from "../utils/http";
+import { useParams } from "react-router-dom";
 
 const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   projectTitle,
   borderColors,
   boardId,
 }) => {
-  const taskCtx = useContext(TaskContext);
+  const {tasks, setTasks} = useContext(TaskContext);
   const dragCtx = useContext(DraggableContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [labels, setLabels] = useState<string[]>([""]);
+  const [isFetching, setIsFetching] = useState(true);
 
-  const boardTask = taskCtx.tasks.filter((task) => task.boardId === boardId);
-  // const [tasks, setTasks] = useState<taskProps[]>(dummyTask);
+  const params = useParams();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await fetchTask(params.projectId);
+      if (data) {
+        setTasks(data);
+      }
+      setIsFetching(false);
+    };
+    loadData();
+  }, [params.projectId, setTasks]);
+
+  const boardTask = tasks.filter((task) => task.boardId === boardId);
 
   const openModalHandler = () => {
     setModalOpen(true);
@@ -30,7 +46,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     setModalOpen(false);
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -39,28 +55,17 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     const priority = formData.get("priority") as string;
     const date = formData.get("date") as string;
 
-    if (!isNotEmpty(taskTitle)) {
-      toast.error("Please enter a task title");
-      return;
-    }
-
-    if (!isNotEmpty(assignee)) {
-      toast.error("Please enter an assignee name");
-      return;
-    }
-
-    if (!isNotEmpty(priority)) {
-      toast.error("Select the task priority, it is required");
-      return;
-    }
-
-    if (!isNotEmpty(date)) {
-      toast.error("Enter a due date for the task");
+    if (
+      !isNotEmpty(taskTitle) ||
+      !isNotEmpty(assignee) ||
+      !isNotEmpty(priority) ||
+      !isNotEmpty(date)
+    ) {
+      toast.error("Fill in all the fields");
       return;
     }
 
     const newTask: taskProps = {
-      id: Math.random(),
       title: taskTitle,
       assignee,
       date,
@@ -69,24 +74,45 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
       label: labels,
     };
 
-    taskCtx.setTasks((prevTask) => [...prevTask, { ...newTask }]);
+    // taskCtx.setTasks((prevTask) => [...prevTask, { ...newTask }]);
 
-    setModalOpen(false);
+    try {
+      setModalOpen(false);
+      await storeTask(newTask, params.projectId);
+      const updatedTask = await fetchTask(params.projectId);
+      setTasks(updatedTask);
+    } catch (error) {
+      toast.error("Failed to create task");
+    } finally {
+      setIsFetching(false);
+    }
+
     setLabels([""]);
   };
 
-  const handleDrop = (targetBoardId: string) => {
+  const handleDrop = async(targetBoardId: string) => {
     if (!dragCtx.draggableTask) return;
 
     const draggedTask = dragCtx.draggableTask.task;
 
     const updatedTask = { ...draggedTask, boardId: targetBoardId };
 
-    taskCtx.setTasks((prevTask) =>
-      prevTask.map((t) => (t.id === draggedTask.id ? updatedTask : t))
-    );
-
+    //  setTasks((prevTask) =>
+    //   prevTask.map((t) => (t.id === draggedTask.id ? updatedTask : t))
+    // );
+   
+    try {
     dragCtx.setDraggableTask(null);
+    await updateTask(updatedTask, params.projectId, draggedTask.id, "PATCH" );
+
+    
+      const data = await fetchTask(params.projectId);
+      setTasks(data);
+    
+
+    } catch (error) {
+      console.log("Failed to drop the task on the board",error);
+    }
   };
 
   const handleLabelChange = (index: number, value: string) => {
