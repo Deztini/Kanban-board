@@ -1,10 +1,8 @@
 import dayjs from "dayjs";
 import { useState, type FC } from "react";
-import type { projectCardProps, taskProps } from "../types/types";
+import type { taskProps } from "../types/types";
 
-
-
-const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects }) => {
+const CalendarView: FC<taskProps[]> = ({ tasks }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const startOfMonth = currentMonth.startOf("month").startOf("week");
   const endOfMonth = currentMonth.endOf("month").endOf("week");
@@ -20,7 +18,7 @@ const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects })
     <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid p-4 rounded-xl text-white mt-12">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">
-          Project Calendar - {currentMonth.format("MMMM YYYY")}
+          {currentMonth.format("MMMM YYYY")}
         </h2>
         <div className="space-x-8">
           <button
@@ -46,7 +44,10 @@ const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects })
 
       <div className="grid grid-cols-7">
         {["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((d) => (
-          <div key={d} className="font-semibold text-center text-[#ccc] mb-4 mt-2">
+          <div
+            key={d}
+            className="font-semibold text-center text-[#ccc] mb-4 mt-4"
+          >
             {d}
           </div>
         ))}
@@ -59,8 +60,8 @@ const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects })
           return (
             <div
               key={date.toString()}
-              className={`h-28 border p-1 rounded-lg ${
-                date.month() !== currentMonth.month() ? "text-[#ccc]" : ""
+              className={`h-30 border p-1 rounded-lg ${
+                date.month() !== currentMonth.month() ? "text-[#908e8e]" : ""
               }`}
             >
               <div className="text-sm font-bold">{date.date()}</div>
@@ -68,7 +69,6 @@ const CalendarView: FC<taskProps[] & projectCardProps[]> = ({ tasks, projects })
                 <div
                   key={task.id}
                   className="mt-1 text-xs bg-blue-600 rounded px-4 h-auto "
-                  title={task.title}
                 >
                   {task.title}
                 </div>
