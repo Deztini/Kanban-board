@@ -1,4 +1,4 @@
-import { Calendar, Home, Kanban, Users } from "lucide-react";
+import { Calendar, Home, Kanban, Settings, Users } from "lucide-react";
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -8,6 +8,7 @@ const Sidebar: FC = () => {
     { path: "/projectpulse/teams", label: "Team Management", icon: Users },
     { path: "/projectpulse/projects", label: "Projects", icon: Kanban },
     { path: "/projectpulse/calendar", label: "Calendar", icon: Calendar },
+    {path: "/projectpulse/settings", label: "Settings", icon: Settings}
   ];
 
   return (
