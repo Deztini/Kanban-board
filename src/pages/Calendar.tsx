@@ -2,6 +2,7 @@ import { useEffect, useState, type FC } from "react";
 import CalendarView from "../components/CalendarView";
 import { fetchProjects, fetchTask } from "../utils/http";
 import type { projectCardProps, taskProps } from "../types/types";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const CalendarPage: FC = () => {
   const [projects, setProjects] = useState<projectCardProps[]>();
@@ -9,6 +10,7 @@ const CalendarPage: FC = () => {
   const [projectTitle, setProjectTitle] = useState("All Projects");
   const [projectStatus, setProjectStatus] = useState("All Statuses");
   const [priorities, setPriorities] = useState("All Priorities");
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     const fetchedProjects = async () => {
@@ -24,6 +26,7 @@ const CalendarPage: FC = () => {
 
       for (const proj of projects) {
         const loadedTask = await fetchTask(proj.id);
+        setIsFetching(false);
         const taskArray = loadedTask
           ? Object.entries(loadedTask).map(([id, task]) => ({
               id,
@@ -41,6 +44,8 @@ const CalendarPage: FC = () => {
       handleTask();
     }
   }, [projects]);
+
+  let content;
 
   const projectTitleHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setProjectTitle(e.target.value);
@@ -63,6 +68,12 @@ const CalendarPage: FC = () => {
       priorities === "All Priorities" || t.priority === priorities;
     return matchedProjectTitle && matchedProjectStatus && matchedPriority;
   });
+
+  if (isFetching) {
+    content = <LoadingSpinner />;
+  } else {
+    content = <CalendarView tasks={filteredTask} />;
+  }
 
   return (
     <div>
@@ -110,7 +121,7 @@ const CalendarPage: FC = () => {
         </select>
       </div>
 
-      {tasks && projects && <CalendarView tasks={filteredTask} />}
+      {tasks && projects && content}
     </div>
   );
 };
