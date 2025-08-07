@@ -123,7 +123,7 @@ const SettingsPage: FC = () => {
               />
             </label>
 
-            <button className={`${theme === "dark" ? "bg-black border-1 border-solid border-[#3E3A45] hover:bg-[#121212]" : "bg-white border-1 border-solid border-[#ccc] hover:bg-gray-200"} px-4 py-2 rounded-[7px]  cursor-pointer`}>
+            <button className={`${theme === "dark" ? "bg-black border-1 border-solid border-[#3E3A45] hover:bg-[#121212]" : "bg-white border-1 border-solid border-[#ccc] hover:bg-[#ccc]"} px-4 py-2 rounded-[7px]  cursor-pointer`}>
               Upload New Image
             </button>
           </div>

@@ -32,7 +32,7 @@ const Sidebar: FC = () => {
             className={({ isActive }) =>
               `px-4 py-3 block ${
                 isActive
-                  ? "bg-[#af74d7] rounded-xl text-white font-semibold"
+                  ? "bg-[#af74d7] rounded-xl  font-semibold"
                   : ` hover:mb-4 hover:rounded-xl ${
                       theme === "dark"
                         ? "hover:bg-[#1a1a1a] hover:text-white "
