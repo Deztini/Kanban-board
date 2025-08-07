@@ -1,5 +1,7 @@
 import type { FC } from "react";
 import { useState } from "react";
+import ThemeToggle from "../components/ThemeToggle";
+import { useTheme } from "../hooks/useTheme";
 
 const SettingsPage: FC = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -18,39 +20,40 @@ const SettingsPage: FC = () => {
   const name = localStorage.getItem("userName");
   const email = localStorage.getItem("email");
 
+  const {theme} = useTheme();
 
   return (
-    <div className="text-white">
+    <div>
       <h1 className="text-3xl font-bold">Account Settings</h1>
       <h1 className="text-3xl font-semibold mt-14">Your Profile</h1>
 
       <div className="flex gap-6">
-        <div className="bg-[#2a2834] py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl">
-          <h1 className="text-white font-bold text-2xl">Profile Information</h1>
-          <p className="text-[#a5a3a3] mt-2 font-semibold">
+        <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+          <h1 className="font-bold text-2xl">Profile Information</h1>
+          <p className="mt-2 font-semibold">
             Update your account's profile information and email address.
           </p>
           <form className="mt-8">
             <div className="flex gap-6 items-center mb-2">
               <div className="flex flex-col gap-2">
-                <label className="text-[#a5a3a3]">Name</label>
+                <label>Name</label>
                 <input
                   type="text"
                   required
                   placeholder=""
-                  className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
+                  className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={name ? name : ""}
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[#a5a3a3]">Email</label>
+                <label>Email</label>
                 <input
                   type="text"
                   required
                   placeholder=""
-                  className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
+                 className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={email ? email : ""}
                 />
@@ -59,24 +62,24 @@ const SettingsPage: FC = () => {
 
             <div className="flex gap-6 items-center mb-2">
               <div className="flex flex-col gap-2">
-                <label className="text-[#a5a3a3]">Company Name</label>
+                <label>Company Name</label>
                 <input
                   type="text"
                   required
                   placeholder=""
-                  className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
+                 className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={companyName ?? ""}
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[#a5a3a3]">Job Title</label>
+                <label>Job Title</label>
                 <input
                   type="text"
                   required
                   placeholder=""
-                  className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
+                  className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={jobTitle ? jobTitle : ""}
                 />
@@ -89,15 +92,16 @@ const SettingsPage: FC = () => {
           </form>
         </div>
 
-        <div className="bg-[#2a2834] py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl">
-          <h1 className="text-white font-bold text-2xl">Profile Picture</h1>
-          <p className="text-[#a5a3a3] mt-2 font-semibold">
+      
+        <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+          <h1 className="font-bold text-2xl">Profile Picture</h1>
+          <p className="mt-2 font-semibold">
             Update your profile picture.
           </p>
 
           <div className="flex flex-col justify-center items-center gap-4 mt-6">
             <label htmlFor="profileUpload" className="cursor-pointer">
-              <div className="h-[160px] w-[160px] rounded-full bg-[#121212] border-2 border-[#3E3A45] flex justify-center items-center overflow-hidden">
+              <div className={`h-[160px] w-[160px] rounded-full  flex justify-center items-center overflow-hidden ${theme === "dark" ? "bg-[#121212] border-2 border-[#3E3A45]" : "bg-white border-2 border-[#ccc]"}`}>
                 {image ? (
                   <img
                     src={image}
@@ -105,7 +109,7 @@ const SettingsPage: FC = () => {
                     className="object-cover h-full w-full"
                   />
                 ) : (
-                  <span className="text-[18px] text-gray-400">
+                  <span className="text-[18px]">
                     Click to Upload
                   </span>
                 )}
@@ -119,23 +123,27 @@ const SettingsPage: FC = () => {
               />
             </label>
 
-            <button className="bg-black border-1 border-solid border-[#3E3A45] px-4 py-2 rounded-[7px] hover:bg-[#121212] cursor-pointer">
+            <button className={`${theme === "dark" ? "bg-black border-1 border-solid border-[#3E3A45] hover:bg-[#121212]" : "bg-white border-1 border-solid border-[#ccc] hover:bg-gray-200"} px-4 py-2 rounded-[7px]  cursor-pointer`}>
               Upload New Image
             </button>
           </div>
         </div>
 
-        <div className="bg-[#2a2834] py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl">
-          <h1 className="text-white font-bold text-2xl">Theme</h1>
-          <p className="text-[#a5a3a3] mt-2 font-semibold">
+          <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+          <h1 className="font-bold text-2xl">Theme</h1>
+          <p className="mt-2 font-semibold">
             Choose your preferred theme.
           </p>
 
-          <div className="mt-4">
-            <h1 className="text-white font-bold text-2xl">Dark Mode</h1>
-            <p className="text-[#a5a3a3] mt-2 font-semibold">
-              Enable dark theme for the application.
-            </p>
+          <div className="mt-4 flex gap-12 items-center">
+            <div>
+              <h1 className="font-bold text-2xl">Dark Mode</h1>
+              <p className="mt-2 font-semibold">
+                Enable dark theme for the application.
+              </p>
+            </div>
+
+            <ThemeToggle />
           </div>
         </div>
       </div>

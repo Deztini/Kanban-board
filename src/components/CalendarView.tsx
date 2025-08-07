@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useState, type FC } from "react";
 import type { taskProps } from "../types/types";
+import { useTheme } from "../hooks/useTheme";
 
 const CalendarView: FC<taskProps[]> = ({ tasks }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
@@ -14,8 +15,9 @@ const CalendarView: FC<taskProps[]> = ({ tasks }) => {
     calendarDays.push(day);
     day = day.add(1, "day");
   }
+  const {theme} = useTheme();
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid p-4 rounded-xl text-white mt-12">
+    <div className={`${theme === "dark" ? "bg-[#141217] border-[#3E3A45] border-2 border-solid" : "bg-white border-[#ccc] border-2 border-solid"}  p-4 rounded-xl  mt-12`}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">
           {currentMonth.format("MMMM YYYY")}
@@ -46,7 +48,7 @@ const CalendarView: FC<taskProps[]> = ({ tasks }) => {
         {["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((d) => (
           <div
             key={d}
-            className="font-semibold text-center text-[#ccc] mb-4 mt-4"
+            className="font-semibold text-center mb-4 mt-4"
           >
             {d}
           </div>

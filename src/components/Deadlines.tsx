@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 const DUMMY_DATA = [
   {
@@ -19,16 +20,23 @@ const DUMMY_DATA = [
 ];
 
 const Deadlines: FC = () => {
+  const { theme } = useTheme();
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[280px] h-[300px] px-4 py-4 rounded-xl mt-6">
-      <h1 className="text-white font-bold text-xl ">Upcoming Deadlines</h1>
+    <div
+      className={`${
+        theme === "dark"
+          ? "bg-[#141217] border-[#3E3A45] border-2 border-solid "
+          : "bg-[#ffff] border border-[#ccc]"
+      } shadow-2xl w-[280px] h-[300px] px-4 py-4 rounded-xl mt-6`}
+    >
+      <h1 className="font-bold text-xl ">Upcoming Deadlines</h1>
       {DUMMY_DATA.map((item) => (
         <div className="my-2">
-          <p className="text-white font-bold">{item.taskName}</p>
+          <p className="font-bold">{item.taskName}</p>
           <h1 className="text-[blue] font-semibold text-xs">
             {item.projectName}
           </h1>
-          <p className="text-[#ccc] text-left">•Due:{item.dueDate}</p>
+          <p className="text-left">•Due:{item.dueDate}</p>
         </div>
       ))}
     </div>

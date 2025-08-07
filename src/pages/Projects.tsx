@@ -15,12 +15,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchProjects, storeProjects } from "../utils/http";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
+import { useTheme } from "../hooks/useTheme";
 
 const ProjectsPage: FC = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
   const [projects, setProjects] = useState<generalProjectProps[]>([]);
   const [isFetching, setIsFetching] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const loadData = async () => {
@@ -68,8 +70,6 @@ const ProjectsPage: FC = () => {
       return;
     }
 
-  
-
     const newProject: generalProjectProps = {
       title: projectTitle,
       description,
@@ -105,10 +105,10 @@ const ProjectsPage: FC = () => {
     content = <LoadingSpinner />;
   } else if (projects.length === 0) {
     content = (
-      <div className="flex flex-col items-center justify-center text-center text-white mt-10">
-        <FolderPlus className="w-12 h-12 text-gray-400 mb-4" />
+      <div className="flex flex-col items-center justify-center text-center  mt-10">
+        <FolderPlus className="w-12 h-12  mb-4" />
         <p className="text-2xl font-semibold mb-1">No Projects Yet</p>
-        <p className="text-xl text-gray-400">
+        <p className="text-xl">
           Click the "Create New Project" button to get started.
         </p>
       </div>
@@ -134,7 +134,7 @@ const ProjectsPage: FC = () => {
       <ToastContainer position="top-center" />
       <div>
         <div className="flex justify-between">
-          <h1 className="text-3xl font-bold text-white mt-4">Your Projects</h1>
+          <h1 className="text-3xl font-bold mt-4">Your Projects</h1>
           <button
             onClick={openModalHandler}
             className="bg-[#af74d7] text-white rounded-xl w-[200px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5] flex items-center"
@@ -210,30 +210,42 @@ const ProjectsPage: FC = () => {
         >
           <form className="flex flex-col gap-4" onSubmit={submitHandler}>
             <div className="flex flex-col gap-2">
-              <label className="text-white">Project Title</label>
+              <label>Project Title</label>
               <input
                 type="text"
                 required
                 placeholder=""
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? "bg-black border border-[#3E3A45] h-[35px]"
+                    : "bg-white border-1 border-solid border-[#ccc]"
+                } px-4 py-4  h-[35px] rounded-[5px]`}
                 name="projectTitle"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Description</label>
+              <label>Description</label>
               <textarea
                 required
                 placeholder="Add detailed notes, subtasks, or links related to this task..."
-                className="bg-black  rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? "bg-black border border-[#3E3A45] "
+                    : "bg-white border-1 border-solid border-[#ccc]"
+                } px-4 py-4  rounded-[5px]`}
                 name="description"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Status</label>
+              <label>Status</label>
               <select
-                className="bg-black h-[40px] text-white px-4 py-2"
+                  className={`${
+                  theme === "dark"
+                    ? "border border-[#3E3A45] h-[40px]"
+                    : "border-1 border-solid border-[#ccc]"
+                } px-4 py-2  h-[40px] rounded-[5px]`}
                 defaultValue=""
                 name="status"
                 required

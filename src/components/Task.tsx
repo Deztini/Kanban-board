@@ -14,10 +14,11 @@ import { TaskContext } from "../store/context/project-context";
 import { DraggableContext } from "../store/context/draggable-context";
 import { useParams } from "react-router-dom";
 import { deleteTask, fetchTask, updateTask } from "../utils/http";
+import { useTheme } from "../hooks/useTheme";
 
 const Task: FC<taskProps> = ({ id, boardId }) => {
   const params = useParams();
-  const {tasks, setTasks} = useContext(TaskContext);
+  const { tasks, setTasks } = useContext(TaskContext);
   const dragCtx = useContext(DraggableContext);
   const [isClicked, setIsClicked] = useState<boolean>();
   const [edit, setEdit] = useState(false);
@@ -145,29 +146,32 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
     setEditLabel(updatedLabels);
   };
 
+  const { theme } = useTheme();
+
   return (
     <>
       <div
         draggable
         onDragStart={() => handleDrag(specificTask)}
-        className="bg-[#000] w-78 h-auto py-4 px-6 rounded-xl relative"
+        className={`${
+          theme === "dark" ? "bg-black" : "bg-[#6a696931]"
+        } w-78 h-auto py-4 px-6 rounded-xl shadow-2xl relative`}
       >
-        <div className="flex justify-between items-start">
+        <div className=" flex justify-between items-start">
           <div>
-            <h1 className="text-white text-xl font-bold mb-2">{title}</h1>
+            <h1 className="text-xl font-bold mb-2">{title}</h1>
 
             <p
               className={
-                priority === "High"
-                  ? "bg-[ #3C1F20] text-[#FF4C4C] rounded-3xl w-25 px-2 py-2"
-                  : "text-white"
+                priority === "High" &&
+                "bg-[ #3C1F20] text-[#FF4C4C] rounded-3xl w-25 px-2 py-2"
               }
             >
               {priority}
             </p>
           </div>
 
-          <button className="text-white cursor-pointer" onClick={toggleOverlay}>
+          <button className="cursor-pointer" onClick={toggleOverlay}>
             <Ellipsis />
           </button>
         </div>
@@ -176,23 +180,33 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
           {label.map((l, index) => (
             <p
               key={index}
-              className="text-white font-semibold bg-[#121212] rounded-xl shadow-lg px-2 py-2 mb-2"
+              className={`${
+                theme === "dark" ? "bg-[#121212] " : "bg-[#ffffff71]"
+              }font-semibold rounded-xl shadow-lg px-2 py-2 mb-2`}
             >
               {l}
             </p>
           ))}
         </div>
         {isClicked && (
-          <div className="bg-[#121212] h-28 w-35 flex flex-col gap-1 z-10 absolute top-13 right-5 rounded-xl px-3 py-3">
+          <div
+            className={`${
+              theme === "dark" ? "bg-[#121212] " : "bg-[#ffffff71]"
+            } h-28 w-35 flex flex-col gap-1 z-10 absolute top-13 right-5 rounded-xl px-3 py-3`}
+          >
             <button
-              className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+              className={`${
+                theme === "dark" ? "hover:bg-black" : "hover:bg-[#ccc]"
+              } cursor-pointer flex items-center gap-2  py-2 px-2 rounded-xl`}
               onClick={handleEdit}
             >
               {" "}
               <Pencil style={{ color: "#3B82F6" }} /> Edit
             </button>
             <button
-              className="text-white cursor-pointer flex items-center gap-2 hover:bg-black py-2 px-2 rounded-xl"
+              className={`${
+                theme === "dark" ? "hover:bg-black" : "hover:bg-[#ccc]"
+              } cursor-pointer flex items-center gap-2  py-2 px-2 rounded-xl`}
               onClick={handleDelete.bind(this, id)}
             >
               {" "}
@@ -202,10 +216,10 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
         )}
 
         <div className="flex items-center justify-between">
-          <p className="text-[#ccc] font-bold">{assignee}</p>
+          <p className="font-bold">{assignee}</p>
           <div className="flex items-center gap-2">
-            <CalendarDays size={16} color="#ccc" />
-            <p className=" text-[#ccc]">{date}</p>
+            <CalendarDays size={16} />
+            <p>{date}</p>
           </div>
         </div>
       </div>
@@ -220,12 +234,16 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
       >
         <form className="flex flex-col gap-4" onSubmit={handleUpdate}>
           <div className="flex flex-col gap-2">
-            <label className="text-white">Task Title</label>
+            <label>Task Title</label>
             <input
               type="text"
               required
               placeholder="e.g Implement user authentication"
-              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              className={`${
+                theme === "dark"
+                  ? " border border-[#3E3A45] h-[35px]"
+                  : " border-2 border-solid border-[#ccc]"
+              } px-2 py-2  rounded-[5px]`}
               name="title"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
@@ -238,7 +256,11 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
               type="text"
               required
               placeholder="John Doe"
-              className="bg-black h-[35px] rounded px-4 py-4 text-white"
+              className={`${
+                theme === "dark"
+                  ? " border border-[#3E3A45] h-[35px]"
+                  : " border-2 border-solid border-[#ccc]"
+              } px-2 py-2  rounded-[5px]`}
               name="assign"
               value={editAssignee}
               onChange={(e) => setEditAssignee(e.target.value)}
@@ -248,7 +270,11 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
           <div className="flex flex-col gap-2">
             <label className="text-white">Priority</label>
             <select
-              className="bg-black h-[40px] text-white px-4 py-2"
+              className={`${
+                theme === "dark"
+                  ? " border border-[#3E3A45] h-[35px]"
+                  : " border-2 border-solid border-[#ccc]"
+              } px-2 py-2  rounded-[5px]`}
               value={editPriority}
               name="priority"
               onChange={(e) => setEditPriority(e.target.value)}
@@ -263,20 +289,24 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-white">Due Date</label>
+            <label>Due Date</label>
             <input
               type="date"
               required
               name="date"
               placeholder="Pick a date"
-              className=" bg-black h-[35px] rounded px-4 py-4 text-white "
+              className={`${
+                theme === "dark"
+                  ? " border border-[#3E3A45] h-[35px]"
+                  : " border-2 border-solid border-[#ccc]"
+              } px-2 py-2  rounded-[5px]`}
               value={editDate}
               onChange={(e) => setEditDate(e.target.value)}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-white">Add Label(s)</label>
+            <label>Add Label(s)</label>
             <div
               className={
                 editLabel.length < 2
@@ -293,11 +323,15 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
                     value={label}
                     placeholder={index === 0 ? "Backend" : "Another Label"}
                     onChange={(e) => handleLabelChange(index, e.target.value)}
-                    className=" bg-black h-[35px] w-[100%] rounded px-4 py-4 text-white "
+                    className={`${
+                      theme === "dark"
+                        ? " border border-[#3E3A45]"
+                        : " border-2 border-solid border-[#ccc]"
+                    }  px-2 py-2  w-65 rounded-[5px]`}
                   />
                   {editLabel.length === 2 && (
                     <button
-                      className="text-white cursor-pointer hover:text-[#af74d7]"
+                      className="cursor-pointer hover:text-[#af74d7]"
                       onClick={() => handleRemoveLabel(index)}
                     >
                       <Minus />
@@ -308,7 +342,7 @@ const Task: FC<taskProps> = ({ id, boardId }) => {
 
               {editLabel.length < 2 && (
                 <button
-                  className="text-white cursor-pointer hover:text-[#af74d7]"
+                  className="cursor-pointer hover:text-[#af74d7]"
                   onClick={handleAddLabel}
                 >
                   <PlusIcon />

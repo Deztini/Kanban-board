@@ -11,6 +11,7 @@ import {
   isEqual,
   hasMinLength,
 } from "../utils/validation";
+import { useTheme } from "../hooks/useTheme";
 
 const Signup: FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -83,14 +84,21 @@ const Signup: FC = () => {
       console.log(data.message);
     }
   };
+  const { theme } = useTheme();
   return (
     <>
       <ToastContainer position="top-center" />
-      <div className="bg-black h-screen flex justify-center items-center">
-        <div className="bg-[#121212]  border-1 border-solid border-[#3E3A45] w-100 h-150 overflow-y-auto flex flex-col items-center p-4 rounded-xl shadow-2xl">
-          <h1 className="text-white text-2xl font-bold">Project Pulse</h1>
-          <h2 className="text-white text-2xl font-bold">Create your account</h2>
-          <p className="text-[#ccc] text-center">
+      <div className="h-screen flex justify-center items-center">
+        <div
+          className={`${
+            theme === "dark"
+              ? "bg-[#121212]  border-1 border-solid border-[#3E3A45]"
+              : "bg-[#fff]  border-1 border-solid border-[#ccc]"
+          }  w-100 h-150 overflow-y-auto flex flex-col items-center p-4 rounded-xl shadow-2xl`}
+        >
+          <h1 className="text-2xl font-bold">Project Pulse</h1>
+          <h2 className="text-2xl font-bold">Create your account</h2>
+          <p className="text-center">
             Start organizing your work visually with Project Pulse.
           </p>
 
@@ -98,7 +106,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Full Name</label>
               <input
-                className="bg-black px-4 py-2 focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="text"
                 required
                 placeholder="John Doe"
@@ -109,7 +121,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Email</label>
               <input
-                className="bg-black px-4 py-2  focus:outline-none active:outline-none border-b-gray-700 h-11 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="email"
                 required
                 placeholder="JohnDoe@gmail.com"
@@ -120,7 +136,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Password</label>
               <input
-                className="bg-black px-4 py-2  focus:outline-none active:outline-none border-b-gray-700 h-11 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="password"
                 required
                 placeholder="Enter Password"
@@ -131,7 +151,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Confirm Password</label>
               <input
-                className="bg-black px-4 py-2  focus:outline-none active:outline-none border-b-gray-700 h-11 rounded"
+               className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="password"
                 required
                 placeholder="Confirm Your Password"
@@ -142,7 +166,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Company Name</label>
               <input
-                className="bg-black px-4 py-2 focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+                className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="text"
                 required
                 placeholder=""
@@ -153,7 +181,11 @@ const Signup: FC = () => {
             <div className="flex flex-col gap-2 mb-2">
               <label>Job Title</label>
               <input
-                className="bg-black px-4 py-2 focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+               className={`${
+                  theme === "dark"
+                    ? "bg-[#121212] text-white border border-[#3E3A45]"
+                    : "bg-white text-black border border-[#ccc]"
+                } px-4 py-2  focus:outline-none active:outline-none  h-11 w-80 rounded-[5px]`}
                 type="text"
                 required
                 placeholder=""
@@ -171,7 +203,7 @@ const Signup: FC = () => {
             </button>
           </form>
 
-          <div className="text-[#ccc] mt-4">
+          <div className="mt-4">
             Already have an account?
             <Link to="/login" style={{ color: "#af74d7" }}>
               Login

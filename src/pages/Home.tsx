@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import homeImg from "../assets/home-image-removebg-preview.png";
 import logo from "../assets/projectpulselogo.png";
 import FeatureCard from "../components/FeatureCard";
+import { useTheme } from "../hooks/useTheme";
 
 const featureData = [
   {
@@ -44,9 +45,13 @@ const featureData = [
 
 const Home: FC = () => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   return (
-    <div className="bg-black  min-h-screen">
-      <header className="w-full flex items-start justify-start cursor-pointer" onClick={() => navigate("/")}>
+    <div className="min-h-screen">
+      <header
+        className="w-full flex items-start justify-start cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <img className="w-40 h-auto" src={logo} alt="" />
       </header>
 
@@ -55,7 +60,7 @@ const Home: FC = () => {
           <h1 className="text-7xl font-bold text-[#af74d7] mb-8 text-shadow-sm text-shadow-[#af74d7]">
             Your Projects, Simplified.
           </h1>
-          <p className="break-words max-w-[600px] text-[#ccc] text-center">
+          <p className="break-words max-w-[600px]  text-center">
             Project Pulse is the intuitive platform designed for developers and
             teams to streamline workflows, track progress, and collaborate
             seamlessly.
@@ -63,13 +68,13 @@ const Home: FC = () => {
 
           <div className="flex itmes-center gap-6 mt-12">
             <button
-              className="w-28 h-10 bg-[#af74d7] px-2 py-0.5 rounded-[8px] text-white cursor-pointer hover:bg-[#944fc5]"
+              className="w-28 h-10 bg-[#af74d7] text-white px-2 py-0.5 rounded-[8px]  cursor-pointer hover:bg-[#944fc5]"
               onClick={() => navigate("/login")}
             >
               Login
             </button>
             <button
-              className="break-words  w-32 h-10 bg-[#af74d7] px-2 py-0.5 rounded-[8px] text-white cursor-pointer hover:bg-[#944fc5] flex items-center "
+              className="break-words  w-32 h-10 text-white bg-[#af74d7] px-2 py-0.5 rounded-[8px] cursor-pointer hover:bg-[#944fc5] flex items-center "
               onClick={() => navigate("/signup")}
             >
               Get Started{" "}
@@ -81,7 +86,7 @@ const Home: FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center rounded-xl shadow-2xl bg-[#121212] p-12 mx-32 ">
+        <div className="flex justify-center items-center rounded-xl shadow-2xl  p-12 mx-32 ">
           <img
             className="rounded-xl shadow-2xl my-12 w-[80%] max-w-[900px]"
             src={homeImg}
@@ -89,8 +94,8 @@ const Home: FC = () => {
           />
         </div>
 
-        <section className="text-white mt-26 ml-10">
-          <h1 className="text-5xl font-bold text-white text-center mb-12">
+        <section className=" mt-26 ml-10">
+          <h1 className="text-5xl font-bold  text-center mb-12">
             Key Features for Enhanced Productivity
           </h1>
 
@@ -108,11 +113,17 @@ const Home: FC = () => {
         </section>
 
         <div className="flex justify-center">
-          <section className="flex flex-col gap-8 items-center mt-24 bg-[#121212] p-8 w-[80%] rounded-2xl">
-            <h1 className="text-white text-3xl font-bold">
+          <section
+            className={`flex flex-col gap-8 items-center mt-24  p-8 w-[80%] rounded-2xl ${
+              theme === "dark"
+                ? " bg-[#121212] text-white"
+                : "bg-[#dcd9d9] text-black"
+            } `}
+          >
+            <h1 className=" text-3xl font-bold">
               Ready To Transform Your Workflow
             </h1>
-            <p className="text-[#ccc]">
+            <p className="">
               Join thousands of teams who are boosting their productivity and
               achieving their goals with Kanban Project Manager.
             </p>
@@ -122,7 +133,7 @@ const Home: FC = () => {
           </section>
         </div>
 
-        <footer className="text-white text-center mt-24">
+        <footer className=" text-center mt-24">
           &copy; 2025 Project Pulse
         </footer>
       </div>

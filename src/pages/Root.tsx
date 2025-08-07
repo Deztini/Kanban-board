@@ -6,7 +6,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 const RootLayout: FC = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex bg-black min-h-screen">
+    <div className="flex  min-h-screen">
       <div className=" w-[240px] flex-1/6">
         <Sidebar />
       </div>

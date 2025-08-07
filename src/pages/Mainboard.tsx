@@ -27,7 +27,7 @@ const Mainboard: FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-black px-8 py-12">
+      <div className="min-h-screen px-8 py-12">
         <div className="flex gap-74 items-center">
           <button
             onClick={() => navigate(-1)}
@@ -36,7 +36,7 @@ const Mainboard: FC = () => {
             <ChevronLeft />
             <span>Back To All Projects</span>
           </button>
-          <h1 className="text-white text-3xl mb-2 text-center uppercase">
+          <h1 className="text-3xl mb-2 text-center uppercase">
             {!project ? (
               "loading project..."
             ) : (
@@ -45,7 +45,7 @@ const Mainboard: FC = () => {
           </h1>
         </div>
 
-        <p className="text-[#ccc] text-center">
+        <p className="   text-center">
           {" "}
           Manage your project tasks efficiently with drag-and-drop
           functionality.

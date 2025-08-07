@@ -11,6 +11,7 @@ import ProjectsPage from "./pages/Projects";
 import TeamManagement from "./pages/TeamManagement";
 import CalendarPage from "./pages/Calendar";
 import SettingsPage from "./pages/Settings";
+import { ThemeProvider } from "./store/context/Theme-Context";
 
 function App() {
   const router = createBrowserRouter([
@@ -51,11 +52,13 @@ function App() {
 
   return (
     <>
-      <TaskContextProvider>
-        <DraggableContextProvider>
-          <RouterProvider router={router} />
-        </DraggableContextProvider>
-      </TaskContextProvider>
+      <ThemeProvider>
+        <TaskContextProvider>
+          <DraggableContextProvider>
+            <RouterProvider router={router} />
+          </DraggableContextProvider>
+        </TaskContextProvider>
+      </ThemeProvider>
     </>
   );
 }

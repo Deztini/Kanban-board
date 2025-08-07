@@ -11,7 +11,7 @@ import Deadlines from "../components/Deadlines";
 const Dashboard: FC = () => {
   return (
     <div className="mt-4">
-      <h1 className="text-white font-bold text-4xl ">Dashboard Overview</h1>
+      <h1 className="font-bold text-4xl ">Dashboard Overview</h1>
 
       <div className="flex gap-4 mt-8">
         <Card

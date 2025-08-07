@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { Mail } from "lucide-react";
+import { useTheme } from "../hooks/useTheme";
 const DUMMY_DATA = [
   {
     email: "chris.t@example.com",
@@ -12,10 +13,17 @@ const DUMMY_DATA = [
 ];
 
 const TeamInvitations: FC = () => {
+  const { theme } = useTheme();
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[580px] h-auto px-4 py-4 rounded-xl mt-12">
-      <h1 className="text-white font-bold text-2xl">Pending Invitations</h1>
-      <p className="text-[#ccc] font-semibold text-[16px] mt-2">
+    <div
+      className={`${
+        theme === "dark"
+          ? "bg-[#141217] border-[#3E3A45] border-2 border-solid"
+          : "bg-white border-2 border-solid border-[#Ccc]"
+      } shadow-2xl w-[580px] h-auto px-4 py-4 rounded-xl mt-12`}
+    >
+      <h1 className="font-bold text-2xl">Pending Invitations</h1>
+      <p className="font-semibold text-[16px] mt-2">
         Invitations awaiting acceptance.
       </p>
       <div className="my-4 border-1 border-solid border-[#3E3A45]"></div>
@@ -25,8 +33,8 @@ const TeamInvitations: FC = () => {
           <div className="flex items-center gap-3">
             <Mail color="gray" />
             <div>
-              <span className="text-white text-xl">{item.email}</span>
-              <div className="text-[#ccc] text-[14px]">{item.invitation}</div>
+              <span className=" text-xl">{item.email}</span>
+              <div className="text-[14px]">{item.invitation}</div>
             </div>
           </div>
 

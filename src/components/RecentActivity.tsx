@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 const DUMMY_DATA = [
   {
@@ -27,9 +28,16 @@ const DUMMY_DATA = [
 ];
 
 const RecentActivity: FC = () => {
+  const { theme } = useTheme();
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[280px] h-[300px] px-4 py-4 rounded-xl mt-6">
-      <h1 className="text-white font-bold text-xl">Recent Activity</h1>
+    <div
+      className={`${
+        theme === "dark"
+          ? "bg-[#141217] border-[#3E3A45] border-2 border-solid "
+          : "bg-[#ffff] border border-[#ccc]"
+      } shadow-2xl w-[280px] h-[300px] px-4 py-4 rounded-xl mt-6`}
+    >
+      <h1 className="font-bold text-xl">Recent Activity</h1>
       {DUMMY_DATA.map((item) => (
         <div className="my-2">
           <div className="flex items-center gap-2 mb-2">
@@ -42,11 +50,9 @@ const RecentActivity: FC = () => {
             >
               {item.name}
             </p>
-            <h1 className="text-white font-semibold text-xs">
-              {item.activity}
-            </h1>
+            <h1 className="font-semibold text-xs">{item.activity}</h1>
           </div>
-          <p className="text-[#ccc] text-left">{item.publishedTime}</p>
+          <p className="text-left">{item.publishedTime}</p>
         </div>
       ))}
     </div>

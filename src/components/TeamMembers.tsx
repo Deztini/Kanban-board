@@ -12,6 +12,7 @@ import { isNotEmpty, isEmail } from "../utils/validation";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTheme } from "../hooks/useTheme";
 
 const MEMBERS_PER_PAGE = 6;
 
@@ -250,15 +251,25 @@ const TeamMembers: FC = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
+  const { theme } = useTheme();
+
   return (
     <>
       <ToastContainer position="top-center" />
-      <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8">
+      <div
+        className={`${
+          theme === "dark"
+            ? "bg-[#141217] border-[#3E3A45] border-2 border-solid "
+            : "bg-[#ffff] border border-[#ccc]"
+        } shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8`}
+      >
         <div className="flex justify-between">
-          <h1 className="text-white text-3xl font-bold">Team Members</h1>
+          <h1 className="text-3xl font-bold">Team Members</h1>
           <div className="flex gap-8 items-center">
             <input
-              className={`bg-[#374151] px-3 py-2 rounded-[8px] text-[#ccc] focus:outline-none border-2 ${
+              className={`${
+                theme === "dark" ? "bg-[#374151]" : "bg-[#Ccc]"
+              } px-3 py-2 rounded-[8px] focus:outline-none border-2 ${
                 searchTerm.trim() ? "border-[#8b5cf6]" : "border-transparent"
               } `}
               type="search"
@@ -267,7 +278,11 @@ const TeamMembers: FC = () => {
               value={searchTerm}
             />
             <select
-              className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+              className={`${
+                theme === "dark"
+                  ? "bg-black border-2 border-solid border-[#3E3A45]"
+                  : "bg-white border border-[#ccc]"
+              }  px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]`}
               onChange={filterHandler}
               value={roles}
             >
@@ -286,7 +301,7 @@ const TeamMembers: FC = () => {
         </div>
 
         <div className="my-6 mx-4 w-[97%] border-2 border-solid border-[#ccc] px-4 py-4 h-[80%] rounded-[8px]">
-          <div className="grid grid-cols-4 text-[#ccc] font-semibold">
+          <div className="grid grid-cols-4 font-semibold">
             <p>Name</p>
             <p>Email</p>
             <p>Role</p>
@@ -295,7 +310,7 @@ const TeamMembers: FC = () => {
           {currentMembers.map((assignee, index) => (
             <div
               key={index}
-              className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  text-white font-semibold"
+              className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  font-semibold"
             >
               <p>{assignee.name}</p>
               <p>{assignee.email}</p>
@@ -336,7 +351,7 @@ const TeamMembers: FC = () => {
           <button
             onClick={previousPageHandler}
             disabled={currentPage === 1}
-            className={`text-white flex items-center hover:text-[#d3a7f1] ${
+            className={`flex items-center hover:text-[#d3a7f1] ${
               currentPage === 1
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
@@ -345,13 +360,13 @@ const TeamMembers: FC = () => {
             <ChevronLeft />
             <span>Previous</span>
           </button>
-          <span className="text-white">
+          <span>
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={nextPageHandler}
             disabled={currentPage === totalPages}
-            className={`text-white flex items-center hover:text-[#d3a7f1] ${
+            className={`flex items-center hover:text-[#d3a7f1] ${
               currentPage === totalPages
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
@@ -376,33 +391,45 @@ const TeamMembers: FC = () => {
         >
           <form className="flex flex-col gap-4" onSubmit={submitHandler}>
             <div className="flex flex-col gap-2">
-              <label className="text-white">Name</label>
+              <label>Name</label>
               <input
                 type="text"
                 required
                 placeholder="Mike Sam"
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? "bg-black border border-[#3E3A45] h-[35px]"
+                    : "bg-white border-1 border-solid border-[#ccc]"
+                } px-4 py-4  h-[35px] rounded-[5px]`}
                 name="name"
                 defaultValue={edit && currentMember ? currentMember.name : ""}
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Email</label>
+              <label>Email</label>
               <input
                 type="email"
                 required
                 placeholder="mikesam@gmail.com"
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? "bg-black border border-[#3E3A45] h-[35px]"
+                    : "bg-white border-1 border-solid border-[#ccc]"
+                } px-4 py-4  h-[35px] rounded-[5px]`}
                 name="email"
                 defaultValue={edit && currentMember ? currentMember.email : ""}
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Role</label>
+              <label>Role</label>
               <select
-                className="bg-black h-[40px] text-white px-4 py-2"
+                className={`${
+                  theme === "dark"
+                    ? "bg-black border border-[#3E3A45] h-[40px]"
+                    : "bg-white border-1 border-solid border-[#ccc] text-black"
+                } px-4 py-4  h-[40px] rounded-[5px]`}
                 defaultValue={edit && currentMember ? currentMember.role : ""}
                 name="role"
                 required

@@ -3,6 +3,7 @@ import CalendarView from "../components/CalendarView";
 import { fetchProjects, fetchTask } from "../utils/http";
 import type { projectCardProps, taskProps } from "../types/types";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
+import { useTheme } from "../hooks/useTheme";
 
 const CalendarPage: FC = () => {
   const [projects, setProjects] = useState<projectCardProps[]>();
@@ -75,22 +76,34 @@ const CalendarPage: FC = () => {
     content = <CalendarView tasks={filteredTask} />;
   }
 
+  const { theme } = useTheme();
+
   return (
     <div>
-      <h1 className="text-white text-3xl font-bold mb-2 ">Project Calendar</h1>
-      <p className="text-[#Ccc] font-semibold text-[14px] max-w-140 break-words mb-4 mt-4">
+      <h1 className=" text-3xl font-bold mb-2 ">Project Calendar</h1>
+      <p className=" font-semibold text-[14px] max-w-140 break-words mb-4 mt-4">
         Visualize your project tasks, deadlines, and team assignments on a
         comprehensive monthly calendar. Filter by project, status, or priority
         to get a clear overview of your team's workload.
       </p>
 
-      <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[1170px] h-[100px] px-4 py-4 rounded-xl mt-6 flex items-center gap-8">
-        <h1 className="text-[#ccc] font-semibold">Filters:</h1>
+      <div
+        className={`${
+          theme === "dark"
+            ? "bg-[#141217] border-[#3E3A45] border-2 border-solid"
+            : "bg-white border-[#ccc] border-2 border-solid"
+        } border-solid shadow-2xl w-[1170px] h-[100px] px-4 py-4 rounded-xl mt-6 flex items-center gap-8`}
+      >
+        <h1 className="font-semibold">Filters:</h1>
 
         <select
           onChange={projectTitleHandler}
           value={projectTitle}
-          className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+          className={`${
+            theme === "dark"
+              ? "bg-black border-[#3E3A45] border-2 border-solid"
+              : "bg-white border-[#ccc] border-2 border-solid"
+          } px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]`}
         >
           <option>All Projects</option>
           {projects?.map((proj) => (
@@ -101,7 +114,11 @@ const CalendarPage: FC = () => {
         <select
           onChange={projectStatusHandler}
           value={projectStatus}
-          className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+          className={` ${
+            theme === "dark"
+              ? "bg-black border-[#3E3A45] border-2 border-solid"
+              : "bg-white border-[#ccc] border-2 border-solid"
+          } px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]`}
         >
           <option>All Statuses</option>
           <option>Active</option>
@@ -112,7 +129,7 @@ const CalendarPage: FC = () => {
         <select
           onChange={priorityHandler}
           value={priorities}
-          className="text-white bg-black border-2 border-solid border-[#3E3A45] px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]"
+          className={`${theme === "dark" ? "bg-black border-[#3E3A45] border-2 border-solid" : "bg-white border-[#ccc] border-2 border-solid"}  px-2 py-2 rounded-[8px] active:outline-none focus:outline-none focus:border-[#8b5cf6]`}
         >
           <option>All Priorities</option>
           <option>High</option>

@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { fetchTask, updateTask } from "../utils/http";
 import { storeTask } from "../utils/http";
 import { useParams } from "react-router-dom";
+import { useTheme } from "../hooks/useTheme";
 
 const Projectboard: FC<ProjectProps & { boardId: string }> = ({
   projectTitle,
@@ -127,16 +128,22 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
     }
   };
 
+  const { theme } = useTheme();
+
   return (
     <>
       <ToastContainer position="top-center" />
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={() => handleDrop(boardId)}
-        className={`w-[24%] h-full bg-[#121212] py-4 px-4 rounded-2xl ${borderColors} border-2 `}
+        className={`w-[24%] h-full ${
+          theme === "dark"
+            ? `bg-[#121212] border-2  ${borderColors}`
+            : "bg-white border-[#ccc] border-2 border-solid"
+        } py-4 px-4 rounded-2xl `}
       >
         <div className="flex items-center justify-between">
-          <h1 className="font-bold text-white text-2xl mb-4">{projectTitle}</h1>
+          <h1 className="font-bold text-2xl mb-4">{projectTitle}</h1>
           <p className="w-9 h-9 rounded-full flex items-center justify-center bg-[#af74d7]/10 text-[#af74d7] font-semibold ">
             {boardTask.length}
           </p>
@@ -149,10 +156,10 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
             ))
           ) : (
             <div>
-              <h1 className="text-white text-4xl text-center font-bold mb-4">
+              <h1 className=" text-4xl text-center font-bold mb-4">
                 No Tasks Yet
               </h1>
-              <p className="text-gray-500 text-xl text-center">
+              <p className=" text-xl text-center">
                 It looks like you haven't created any task. Start by adding your
                 first task.
               </p>
@@ -161,10 +168,7 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
         </div>
 
         <div className="flex items-end justify-center mt-8">
-          <button
-            className="text-white cursor-pointer flex "
-            onClick={openModalHandler}
-          >
+          <button className="cursor-pointer flex " onClick={openModalHandler}>
             <Plus /> Add Task
           </button>
         </div>
@@ -179,31 +183,43 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
         >
           <form className="flex flex-col gap-4" onSubmit={submitHandler}>
             <div className="flex flex-col gap-2">
-              <label className="text-white">Task Title</label>
+              <label>Task Title</label>
               <input
                 type="text"
                 required
                 placeholder="e.g Implement user authentication"
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? " border border-[#3E3A45] h-[35px]"
+                    : " border-2 border-solid border-[#ccc]"
+                } px-2 py-2  rounded-[5px]`}
                 name="title"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Assignee</label>
+              <label>Assignee</label>
               <input
                 type="text"
                 required
                 placeholder="John Doe"
-                className="bg-black h-[35px] rounded px-4 py-4 text-white"
+                className={`${
+                  theme === "dark"
+                    ? " border border-[#3E3A45] h-[35px]"
+                    : " border-2 border-solid border-[#ccc]"
+                } px-2 py-2  rounded-[5px]`}
                 name="assign"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Priority</label>
+              <label>Priority</label>
               <select
-                className="bg-black h-[40px] text-white px-4 py-2"
+                className={`${
+                  theme === "dark"
+                    ? " border border-[#3E3A45] "
+                    : " border-2 border-solid border-[#ccc]"
+                } px-4 py-2 h-[40px]  rounded-[5px]`}
                 defaultValue=""
                 name="priority"
               >
@@ -217,18 +233,22 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Due Date</label>
+              <label>Due Date</label>
               <input
                 type="date"
                 required
                 name="date"
                 placeholder="Pick a date"
-                className=" bg-black h-[35px] rounded px-4 text-white "
+                className={`${
+                  theme === "dark"
+                    ? " border border-[#3E3A45] "
+                    : " border-2 border-solid border-[#ccc]"
+                } px-2 py-2 h-[35px] rounded-[5px]`}
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-white">Add Label(s)</label>
+              <label>Add Label(s)</label>
               <div
                 className={
                   labels.length < 2
@@ -245,13 +265,17 @@ const Projectboard: FC<ProjectProps & { boardId: string }> = ({
                     value={label}
                     placeholder={index === 0 ? "Backend" : "Another Label"}
                     onChange={(e) => handleLabelChange(index, e.target.value)}
-                    className=" bg-black h-[35px] w-[100%] rounded px-4 py-4 text-white "
+                    className={`${
+                      theme === "dark"
+                        ? " border border-[#3E3A45]"
+                        : " border-2 border-solid border-[#ccc]"
+                    }  px-2 py-2  w-65 rounded-[5px]`}
                   />
                 ))}
 
                 {labels.length < 2 && (
                   <button
-                    className="text-white cursor-pointer hover:text-[#af74d7]"
+                    className="cursor-pointer hover:text-[#af74d7]"
                     onClick={handleAddLabel}
                   >
                     <PlusIcon />

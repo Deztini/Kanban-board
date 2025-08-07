@@ -1,5 +1,6 @@
 import { CalendarDays } from "lucide-react";
 import type { FC } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 const DUMMY_DATA = [
   {
@@ -21,10 +22,11 @@ const DUMMY_DATA = [
 ];
 
 const TeamActivity: FC = () => {
+  const {theme} = useTheme();
   return (
-    <div className="bg-[#141217] border-[#3E3A45] border-2 border-solid shadow-2xl w-[580px] h-auto px-4 py-4 rounded-xl mt-12">
-      <h1 className="text-white font-bold text-2xl">Recent Activity</h1>
-      <p className="text-[#ccc] font-semibold text-[16px] mt-2">
+    <div className={`${theme === "dark" ? "bg-[#141217] border-[#3E3A45] border-2 border-solid" : "bg-white border-[#ccc] border-2 border-solid"} shadow-2xl w-[580px] h-auto px-4 py-4 rounded-xl mt-12`}>
+      <h1 className="font-bold text-2xl">Recent Activity</h1>
+      <p className="font-semibold text-[16px] mt-2">
         Recent changes and actions within your team.
       </p>
       <div className="my-4 border-1 border-solid border-[#3E3A45]"></div>
@@ -34,8 +36,8 @@ const TeamActivity: FC = () => {
           <div className="flex items-center gap-3">
             <CalendarDays color="gray" />
             <div>
-              <span className="text-white text-xl">{item.activity}</span>
-              <div className="text-[#ccc] text-[14px]">{item.dateTime}</div>
+              <span className="text-xl">{item.activity}</span>
+              <div className=" text-[14px]">{item.dateTime}</div>
             </div>
           </div>
         </div>
