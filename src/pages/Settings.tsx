@@ -13,6 +13,12 @@ const SettingsPage: FC = () => {
     }
   };
 
+  const companyName = localStorage.getItem("companyName");
+  const jobTitle = localStorage.getItem("jobTitle");
+  const name = localStorage.getItem("userName");
+  const email = localStorage.getItem("email");
+
+
   return (
     <div className="text-white">
       <h1 className="text-3xl font-bold">Account Settings</h1>
@@ -34,6 +40,7 @@ const SettingsPage: FC = () => {
                   placeholder=""
                   className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
                   name=""
+                  defaultValue={name ? name : ""}
                 />
               </div>
 
@@ -45,6 +52,7 @@ const SettingsPage: FC = () => {
                   placeholder=""
                   className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
                   name=""
+                  defaultValue={email ? email : ""}
                 />
               </div>
             </div>
@@ -58,6 +66,7 @@ const SettingsPage: FC = () => {
                   placeholder=""
                   className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
                   name=""
+                  defaultValue={companyName ?? ""}
                 />
               </div>
 
@@ -69,6 +78,7 @@ const SettingsPage: FC = () => {
                   placeholder=""
                   className="bg-[#121212] h-[35px] w-[160px] rounded-[7px] px-4 py-4 text-white border-[#3E3A45] border-2 border-solid"
                   name=""
+                  defaultValue={jobTitle ? jobTitle : ""}
                 />
               </div>
             </div>

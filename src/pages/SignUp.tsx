@@ -26,6 +26,8 @@ const Signup: FC = () => {
     const email = formData.get("email");
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
+    const companyName = formData.get("companyName");
+    const jobTitle = formData.get("jobTitle");
 
     if (!isNotEmpty(name)) {
       toast.error("Name is required");
@@ -47,17 +49,29 @@ const Signup: FC = () => {
       return;
     }
 
+    if (!isNotEmpty(companyName)) {
+      toast.error("Company Name is required");
+      return;
+    }
+
+    if (!isNotEmpty(jobTitle)) {
+      toast.error("Job Title is required");
+      return;
+    }
+
     const response = await fetch(`${apiUrl}/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, companyName, jobTitle }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
+      localStorage.setItem("companyName", data.user.companyName);
+      localStorage.setItem("jobTitle", data.user.jobTitle);
+      localStorage.setItem("email", data.user.email);
       setIsLoading(false);
-
       toast.success("Signup Successful");
 
       setTimeout(() => {
@@ -73,7 +87,7 @@ const Signup: FC = () => {
     <>
       <ToastContainer position="top-center" />
       <div className="bg-black h-screen flex justify-center items-center">
-        <div className="bg-[#121212]  border-1 border-solid border-[#3E3A45] w-100 h-150 flex flex-col items-center p-4 rounded-xl shadow-2xl">
+        <div className="bg-[#121212]  border-1 border-solid border-[#3E3A45] w-100 h-150 overflow-y-auto flex flex-col items-center p-4 rounded-xl shadow-2xl">
           <h1 className="text-white text-2xl font-bold">Project Pulse</h1>
           <h2 className="text-white text-2xl font-bold">Create your account</h2>
           <p className="text-[#ccc] text-center">
@@ -122,6 +136,28 @@ const Signup: FC = () => {
                 required
                 placeholder="Confirm Your Password"
                 name="confirmPassword"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 mb-2">
+              <label>Company Name</label>
+              <input
+                className="bg-black px-4 py-2 focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+                type="text"
+                required
+                placeholder=""
+                name="companyName"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 mb-2">
+              <label>Job Title</label>
+              <input
+                className="bg-black px-4 py-2 focus:outline-none active:outline-none border-b-gray-700 h-11 w-80 rounded"
+                type="text"
+                required
+                placeholder=""
+                name="jobTitle"
               />
             </div>
 
