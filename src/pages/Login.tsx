@@ -58,9 +58,9 @@ const Login: FC = () => {
         <div
           className={`${
             theme === "dark"
-              ? "bg-[#121212] border-1 border-solid border-[#3E3A45]"
-              : "bg-[#fff]  border-1 border-solid border-[#ccc]"
-          }   w-100 h-130 flex flex-col items-center px-4 py-3 rounded-xl shadow-2xl`}
+              ? "md:bg-[#121212] md:border-1 border-solid border-[#3E3A45]"
+              : "md:bg-[#fff]  md:border-1 border-solid border-[#ccc]"
+          }   w-100 h-130 flex flex-col items-center px-4 py-3 rounded-xl md:shadow-2xl`}
         >
           <h1 className="text-2xl font-bold">Login</h1>
           <p

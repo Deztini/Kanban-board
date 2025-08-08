@@ -99,7 +99,7 @@ const Home: FC = () => {
             Key Features for Enhanced Productivity
           </h1>
 
-          <div className="flex flex-col sm:flex-row gap-8 justify-center">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-8 justify-center">
             {featureData.map((feature) => (
               <FeatureCard
                 key={feature.id}

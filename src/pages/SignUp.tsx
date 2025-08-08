@@ -92,9 +92,9 @@ const Signup: FC = () => {
         <div
           className={`${
             theme === "dark"
-              ? "bg-[#121212]  border-1 border-solid border-[#3E3A45]"
-              : "bg-[#fff]  border-1 border-solid border-[#ccc]"
-          }  w-100 h-150 overflow-y-auto flex flex-col items-center p-4 rounded-xl shadow-2xl`}
+              ? "md:bg-[#121212]  md:border-1 border-solid border-[#3E3A45]"
+              : "md:bg-[#fff]  md:border-1 border-solid border-[#ccc]"
+          }  w-100 h-150 overflow-y-auto flex flex-col items-center p-4 rounded-xl md:shadow-2xl`}
         >
           <h1 className="text-2xl font-bold">Project Pulse</h1>
           <h2 className="text-2xl font-bold">Create your account</h2>
