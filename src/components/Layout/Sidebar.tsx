@@ -1,9 +1,10 @@
-import { Calendar, Home, Kanban, Settings, Users } from "lucide-react";
+import { Calendar, Home, Kanban, LogOut, Settings, Users } from "lucide-react";
 import type { FC } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
 
 const Sidebar: FC = () => {
+  const navigate = useNavigate();
   const navItems = [
     { path: "/projectpulse/dashboard", label: "Dashboard", icon: Home },
     { path: "/projectpulse/teams", label: "Team Management", icon: Users },
@@ -15,6 +16,17 @@ const Sidebar: FC = () => {
   // bg-[#141217]
   // text-white
   const { theme } = useTheme();
+
+  const handleLogout = () => {
+    localStorage.removeItem("companyName");
+    localStorage.removeItem("jobTitle");
+    localStorage.removeItem("email");
+    localStorage.removeItem("userName");
+
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+  };
 
   return (
     <div
@@ -47,6 +59,13 @@ const Sidebar: FC = () => {
             </div>
           </NavLink>
         ))}
+        <button
+          className="flex items-center gap-2 mt-4  hover:bg-purple-400 cursor-pointer rounded-[7px] px-2 py-2 w-50 ml-2"
+          onClick={handleLogout}
+        >
+          <LogOut />
+          <span>Logout</span>
+        </button>
       </ul>
     </div>
   );
