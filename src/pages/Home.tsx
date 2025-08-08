@@ -52,12 +52,12 @@ const Home: FC = () => {
         className="w-full flex items-start justify-start cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img className="w-40 h-auto" src={logo} alt="" />
+        <img className="w-28 sm:w-40 h-auto" src={logo} alt="" />
       </header>
 
-      <div className="px-4 py-20 pb-8">
-        <div className=" flex flex-col justify-center items-center  mb-12">
-          <h1 className="text-7xl font-bold text-[#af74d7] mb-8 text-shadow-sm text-shadow-[#af74d7]">
+      <div className="px-4 sm:px-8 py-10 sm:py-20 pb-8">
+        <div className=" flex flex-col justify-center items-center mb-12">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#af74d7] mb-6 sm:mb-8 text-shadow-sm text-shadow-[#af74d7] text-center">
             Your Projects, Simplified.
           </h1>
           <p className="break-words max-w-[600px]  text-center">
@@ -66,7 +66,7 @@ const Home: FC = () => {
             seamlessly.
           </p>
 
-          <div className="flex itmes-center gap-6 mt-12">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-8 sm:mt-12">
             <button
               className="w-28 h-10 bg-[#af74d7] text-white px-2 py-0.5 rounded-[8px]  cursor-pointer hover:bg-[#944fc5]"
               onClick={() => navigate("/login")}
@@ -86,20 +86,20 @@ const Home: FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center rounded-xl shadow-2xl  p-12 mx-32 ">
+        <div className="flex justify-center items-center rounded-xl shadow-2xl p-4 sm:p-8 md:p-12 mx-2 sm:mx-8 md:mx-32 ">
           <img
-            className="rounded-xl shadow-2xl my-12 w-[80%] max-w-[900px]"
+            className="rounded-xl shadow-2xl my-8 sm:my-12 w-full sm-w-[80%] max-w-[900px]"
             src={homeImg}
             alt=""
           />
         </div>
 
-        <section className=" mt-26 ml-10">
-          <h1 className="text-5xl font-bold  text-center mb-12">
+        <section className=" mt-20 sm:mt-26 ml-6">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-12">
             Key Features for Enhanced Productivity
           </h1>
 
-          <div className="flex gap-8 justify-center">
+          <div className="flex flex-col sm:flex-row gap-8 justify-center">
             {featureData.map((feature) => (
               <FeatureCard
                 key={feature.id}
@@ -114,13 +114,13 @@ const Home: FC = () => {
 
         <div className="flex justify-center">
           <section
-            className={`flex flex-col gap-8 items-center mt-24  p-8 w-[80%] rounded-2xl ${
+            className={`flex flex-col gap-8 items-center mt-24 p-6 sm:p-8 w-full sm:w-[80%] rounded-2xl text-center ${
               theme === "dark"
                 ? " bg-[#121212] text-white"
                 : "bg-[#dcd9d9] text-black"
             } `}
           >
-            <h1 className=" text-3xl font-bold">
+            <h1 className="text-2xl sm:text-3xl font-bold">
               Ready To Transform Your Workflow
             </h1>
             <p className="">
