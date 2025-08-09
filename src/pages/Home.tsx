@@ -57,7 +57,7 @@ const Home: FC = () => {
 
       <div className="px-4 sm:px-8 py-10 sm:py-20 pb-8">
         <div className=" flex flex-col justify-center items-center mb-12">
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#af74d7] mb-6 sm:mb-8 text-shadow-sm text-shadow-[#af74d7] text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-[#af74d7] mb-6 sm:mb-8 text-shadow-sm text-shadow-[#af74d7] text-center">
             Your Projects, Simplified.
           </h1>
           <p className="break-words max-w-[600px]  text-center">
