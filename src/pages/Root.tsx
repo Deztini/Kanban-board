@@ -12,7 +12,7 @@ const RootLayout: FC = () => {
       <div
         className={`${
           theme === "dark" ? "bg-[#121212]" : ""
-        } w-[240px] flex-1/6`}
+        } root`}
       >
         <Sidebar />
       </div>
@@ -38,4 +38,3 @@ const RootLayout: FC = () => {
 
 export default RootLayout;
 
-// flex-1 gap-8

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 html.light {
   --bg: #ffffff;
   --text: #000000;
@@ -14,7 +13,7 @@ html.dark {
 body {
   background-color: var(--bg);
   color: var(--text);
-  transition: background-color 1s, color 1s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .text-shadow-purple {
@@ -76,8 +75,78 @@ input[type="date"] {
   animation: spin 1s linear infinite;
 }
 
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  padding: 8px 8px;
+}
+
+.sidebar-light {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-dark {
+  box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.05);
+}
+
+.menu-button {
+  display: none;
+}
+
+.close-button {
+  display: none;
+}
+
+.root {
+  position: relative;
+  width: 240px;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-container {
+    display: none;
+    padding-top: 45px;
+  }
+  .menu-button {
+    display: block;
+    position: absolute;
+    top: 30px;
+    left: 5px;
+  }
+  .close-button {
+    display: block;
+    position: absolute;
+    top: 14px;
+    left: 200px;
+  }
+  .show {
+    display: flex;
+    animation: slide-in 0.67s ease-out;
+  }
+  .toggle {
+    display: none;
+  }
+  .root {
+    position: relative;
+    width: 0px;
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-40px);
+  }
+  to {
+    transform: translateX(0);
   }
 }

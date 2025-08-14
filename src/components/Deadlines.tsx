@@ -27,7 +27,7 @@ const Deadlines: FC = () => {
         theme === "dark"
           ? "bg-[#141217] border-[#3E3A45] border-2 border-solid "
           : "bg-[#ffff] border border-[#ccc]"
-      } shadow-2xl w-[280px] h-[300px] px-4 py-4 rounded-xl mt-6`}
+      } shadow-2xl max-w-[480px] w-[100%] h-[300px] px-4 py-4 rounded-xl mt-6 `}
     >
       <h1 className="font-bold text-xl ">Upcoming Deadlines</h1>
       {DUMMY_DATA.map((item) => (

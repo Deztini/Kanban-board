@@ -11,9 +11,9 @@ import Deadlines from "../components/Deadlines";
 const Dashboard: FC = () => {
   return (
     <div className="mt-4">
-      <h1 className="font-bold text-4xl ">Dashboard Overview</h1>
+      <h1 className="font-bold text-4xl text-center lg:text-left">Dashboard Overview</h1>
 
-      <div className="flex gap-4 mt-8">
+      <div className="flex flex-col items-center lg:flex-row gap-4 mt-8">
         <Card
           title="Total Active Projects"
           value={28}
@@ -44,7 +44,7 @@ const Dashboard: FC = () => {
         />
       </div>
 
-      <div className="flex gap-4 items-center mt-10">
+      <div className="flex flex-col lg:flex-row  gap-4 items-center mt-10">
         <DashboardSection />
         <RecentActivity />
         <Deadlines />

@@ -12,7 +12,7 @@ const FeatureCard: FC<featureProps> = ({
   return (
     <>
       <div
-        className={`w-70 h-75  py-6 px-5 rounded-xl shadow-2xl ${
+        className={`w-70 h-75  py-6  px-5 rounded-xl shadow-2xl ${
           theme === "light" ? "bg-[#dcd9d9] text-black" : "bg-[#121212]"
         }`}
       >

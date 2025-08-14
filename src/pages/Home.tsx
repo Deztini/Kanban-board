@@ -52,7 +52,7 @@ const Home: FC = () => {
         className="w-full flex items-start justify-start cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img className="w-28 sm:w-40 h-auto" src={logo} alt="" />
+        <img className="w-28 sm:w-30 h-auto" src={logo} alt="" />
       </header>
 
       <div className="px-4 sm:px-8 py-10 sm:py-20 pb-8">
