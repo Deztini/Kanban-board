@@ -195,11 +195,11 @@ const Signup: FC = () => {
 
             <button
               className={`bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-1 hover:bg-[#944fc5] ${
-                isLoading ? "opacity-50 cursor-not-allowed" : ""
+                isLoading ? "cursor-not-allowed px-1 flex justify-center" : ""
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "Signing In..." : "Sign Up"}
+              {isLoading ? <div className="spinner"></div> : "Sign Up"}
             </button>
           </form>
 

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { isEmail, hasMinLength, isNotEmpty } from "../utils/validation";
 import { useTheme } from "../hooks/useTheme";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const Login: FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -102,11 +103,11 @@ const Login: FC = () => {
 
             <button
               className={`bg-[#af74d7] w-80 h-10 px-4 py-2 rounded cursor-pointer mt-4 mb-6 hover:bg-[#944fc5] ${
-                isLoading ? "opacity-50 cursor-not-allowed" : ""
+                isLoading ? "cursor-not-allowed flex justify-center py-1" : ""
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "Logging In..." : "Login"}
+              {isLoading ? <div className="spinner"></div> : "Login"}
             </button>
           </form>
 
