@@ -39,7 +39,7 @@ const ProjectCard: FC<projectCardProps> = ({
 
  
   return (
-    <div className={`${theme === "dark" ? "bg-[#141217] border-[#3E3A45] border-2 border-solid" : "bg-white border-[#ccc] border-2 border-solid"}  shadow-2xl w-[300px] h-auto px-6 py-4 rounded-xl`}>
+    <div className={`${theme === "dark" ? "bg-[#141217] border-[#3E3A45] border-2 border-solid" : "bg-white border-[#ccc] border-2 border-solid"}  shadow-2xl w-full max-w-lg  h-auto px-6 py-4 rounded-xl`}>
       <div className="flex justify-between items-start gap-1 mb-2">
         <h1 className="text-[20px] font-bold">{title}</h1>
         <p

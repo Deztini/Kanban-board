@@ -8,9 +8,9 @@ import TeamInvitations from "../components/TeamInvitations";
 const TeamManagement: FC = () => {
   return (
     <div>
-      <h1 className="text-white text-2xl font-bold">Manage Teams</h1>
+      <h1 className="text-white text-center lg:text-left text-2xl font-bold">Manage Teams</h1>
 
-      <div className="flex gap-4 mt-8">
+      <div className="grid grid-cols-2  lg:grid-cols-4 gap-8 my-8 justify-items-center">
         <Card
           title="Total Members"
           value={12}
@@ -42,7 +42,7 @@ const TeamManagement: FC = () => {
       </div>
 
       <TeamMembers />
-      <div className="flex gap-8">
+      <div className="flex-col justify-items-center lg:flex-row gap-8 ">
          <TeamActivity />
          <TeamInvitations />
       </div>

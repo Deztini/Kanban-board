@@ -82,6 +82,7 @@ input[type="date"] {
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
   padding: 8px 8px;
+  width: 240px;
 }
 
 .sidebar-light {
@@ -91,6 +92,7 @@ input[type="date"] {
 
 .sidebar-dark {
   box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.05);
+  background-color: #121212;
 }
 
 .menu-button {
@@ -101,10 +103,9 @@ input[type="date"] {
   display: none;
 }
 
-.root {
-  position: relative;
-  width: 240px;
-}
+/* .root {
+  /* position: relative; */
+
 
 @media (max-width: 1024px) {
   .sidebar-container {
@@ -131,8 +132,8 @@ input[type="date"] {
     display: none;
   }
   .root {
-    position: relative;
-    width: 0px;
+    /* position: relative; */
+    /* width: 0px; */
   }
 }
 

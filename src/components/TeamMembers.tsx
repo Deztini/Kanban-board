@@ -264,12 +264,12 @@ const TeamMembers: FC = () => {
         } shadow-2xl w-[100%] h-auto px-4 py-4 rounded-xl mt-8`}
       >
         <div className="flex justify-between">
-          <h1 className="text-3xl font-bold">Team Members</h1>
+          <h1 className="text-xl text-center md:text-2xl lg:text-3xl font-bold">Team Members</h1>
           <div className="flex gap-8 items-center">
             <input
               className={`${
                 theme === "dark" ? "bg-[#374151]" : "bg-[#Ccc]"
-              } px-3 py-2 rounded-[8px] focus:outline-none border-2 ${
+              } px-3 py-2 rounded-[8px] focus:outline-none border-2 ml-4 ${
                 searchTerm.trim() ? "border-[#8b5cf6]" : "border-transparent"
               } `}
               type="search"
@@ -310,18 +310,18 @@ const TeamMembers: FC = () => {
           {currentMembers.map((assignee, index) => (
             <div
               key={index}
-              className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4  font-semibold"
+              className="grid grid-cols-4 border-t-1 border-b-1 border-solid border-t-[#3E3A45] border-b-[#3E3A45] py-4 font-semibold"
             >
-              <p>{assignee.name}</p>
-              <p>{assignee.email}</p>
+              <p className="break-words w-20 lg:w-100">{assignee.name}</p>
+              <p className="break-words w-20 lg:w-100">{assignee.email}</p>
 
               <p
                 className={
                   assignee.role === "Admin"
-                    ? "bg-blue-800/25 text-blue-800 rounded-[25px] py-2 px-4 w-25 text-center"
+                    ? "bg-blue-800/25 text-blue-800 rounded-[25px] py-2 px-4 w-25 flex items-center"
                     : assignee.role === "Member"
-                    ? "bg-green-800/25 text-green-800 rounded-[25px] py-3 px-4 w-25 text-center"
-                    : "bg-black/35 text-white rounded-[25px] py-3 px-4 w-25 text-center"
+                    ? "bg-green-800/25 text-green-800 rounded-[25px] py-3 px-4 w-25 flex items-center"
+                    : "bg-black/35 text-white rounded-[25px] py-3 px-4 w-25 flex items-center"
                 }
               >
                 {assignee.role}

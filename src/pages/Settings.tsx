@@ -20,15 +20,23 @@ const SettingsPage: FC = () => {
   const name = localStorage.getItem("userName");
   const email = localStorage.getItem("email");
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Account Settings</h1>
-      <h1 className="text-3xl font-semibold mt-14">Your Profile</h1>
+      <h1 className="text-3xl sm:ml-12 md:text-center lg:text-left lg:ml-2  font-bold">
+        Account Settings
+      </h1>
+      <h1 className="text-3xl  sm:ml-12 md:text-center lg:text-left lg:ml-2  font-semibold mt-14 sm:mt-6">
+        Your Profile
+      </h1>
 
-      <div className="flex gap-6">
-        <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+      <div className="grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className={`${
+            theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"
+          } py-4 px-4 mt-4 rounded-[10px] border-transparent w-full max-w-[370px] h-[420px] shadow-2xl`}
+        >
           <h1 className="font-bold text-2xl">Profile Information</h1>
           <p className="mt-2 font-semibold">
             Update your account's profile information and email address.
@@ -41,7 +49,11 @@ const SettingsPage: FC = () => {
                   type="text"
                   required
                   placeholder=""
-                  className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
+                  className={`${
+                    theme === "dark"
+                      ? "bg-[#121212] border-[#3E3A45] border-2 border-solid"
+                      : "bg-white border-2 border-solid border-[#ccc]"
+                  } h-[35px] w-full max-w-[300px]  rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={name ? name : ""}
                 />
@@ -53,7 +65,11 @@ const SettingsPage: FC = () => {
                   type="text"
                   required
                   placeholder=""
-                 className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
+                  className={`${
+                    theme === "dark"
+                      ? "bg-[#121212] border-[#3E3A45] border-2 border-solid"
+                      : "bg-white border-2 border-solid border-[#ccc]"
+                  } h-[35px] w-full max-w-[300px]  rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={email ? email : ""}
                 />
@@ -67,7 +83,11 @@ const SettingsPage: FC = () => {
                   type="text"
                   required
                   placeholder=""
-                 className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
+                  className={`${
+                    theme === "dark"
+                      ? "bg-[#121212] border-[#3E3A45] border-2 border-solid"
+                      : "bg-white border-2 border-solid border-[#ccc]"
+                  } h-[35px] w-full max-w-[300px]  rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={companyName ?? ""}
                 />
@@ -79,7 +99,11 @@ const SettingsPage: FC = () => {
                   type="text"
                   required
                   placeholder=""
-                  className={`${theme === "dark" ? "bg-[#121212] border-[#3E3A45] border-2 border-solid" : "bg-white border-2 border-solid border-[#ccc]"} h-[35px] w-[160px] rounded-[7px] px-4 py-4  `}
+                  className={`${
+                    theme === "dark"
+                      ? "bg-[#121212] border-[#3E3A45] border-2 border-solid"
+                      : "bg-white border-2 border-solid border-[#ccc]"
+                  } h-[35px] w-full max-w-[300px] rounded-[7px] px-4 py-4  `}
                   name=""
                   defaultValue={jobTitle ? jobTitle : ""}
                 />
@@ -92,16 +116,23 @@ const SettingsPage: FC = () => {
           </form>
         </div>
 
-      
-        <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+        <div
+          className={`${
+            theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"
+          } py-4 px-4 mt-4 rounded-[10px] border-transparent w-full max-w-[370px] h-[420px] shadow-2xl`}
+        >
           <h1 className="font-bold text-2xl">Profile Picture</h1>
-          <p className="mt-2 font-semibold">
-            Update your profile picture.
-          </p>
+          <p className="mt-2 font-semibold">Update your profile picture.</p>
 
           <div className="flex flex-col justify-center items-center gap-4 mt-6">
             <label htmlFor="profileUpload" className="cursor-pointer">
-              <div className={`h-[160px] w-[160px] rounded-full  flex justify-center items-center overflow-hidden ${theme === "dark" ? "bg-[#121212] border-2 border-[#3E3A45]" : "bg-white border-2 border-[#ccc]"}`}>
+              <div
+                className={`h-[160px] w-[160px] rounded-full  flex justify-center items-center overflow-hidden ${
+                  theme === "dark"
+                    ? "bg-[#121212] border-2 border-[#3E3A45]"
+                    : "bg-white border-2 border-[#ccc]"
+                }`}
+              >
                 {image ? (
                   <img
                     src={image}
@@ -109,9 +140,7 @@ const SettingsPage: FC = () => {
                     className="object-cover h-full w-full"
                   />
                 ) : (
-                  <span className="text-[18px]">
-                    Click to Upload
-                  </span>
+                  <span className="text-[18px]">Click to Upload</span>
                 )}
               </div>
               <input
@@ -123,17 +152,25 @@ const SettingsPage: FC = () => {
               />
             </label>
 
-            <button className={`${theme === "dark" ? "bg-black border-1 border-solid border-[#3E3A45] hover:bg-[#121212]" : "bg-white border-1 border-solid border-[#ccc] hover:bg-[#ccc]"} px-4 py-2 rounded-[7px]  cursor-pointer`}>
+            <button
+              className={`${
+                theme === "dark"
+                  ? "bg-black border-1 border-solid border-[#3E3A45] hover:bg-[#121212]"
+                  : "bg-white border-1 border-solid border-[#ccc] hover:bg-[#ccc]"
+              } px-4 py-2 rounded-[7px]  cursor-pointer`}
+            >
               Upload New Image
             </button>
           </div>
         </div>
 
-          <div className={`${theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"} py-4 px-4 mt-4 rounded-[10px] border-transparent w-[375px] h-[420px] shadow-2xl`}>
+        <div
+          className={`${
+            theme === "dark" ? "bg-[#2a2834]" : "bg-[#ffffffc4]"
+          } py-4 px-4 mt-4 rounded-[10px] border-transparent w-full max-w-[370px] h-[420px] shadow-2xl`}
+        >
           <h1 className="font-bold text-2xl">Theme</h1>
-          <p className="mt-2 font-semibold">
-            Choose your preferred theme.
-          </p>
+          <p className="mt-2 font-semibold">Choose your preferred theme.</p>
 
           <div className="mt-4 flex gap-12 items-center">
             <div>

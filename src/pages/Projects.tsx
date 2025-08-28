@@ -115,7 +115,7 @@ const ProjectsPage: FC = () => {
     );
   } else {
     content = (
-      <div className="flex gap-12 flex-wrap mt-6">
+      <div className="grid grid-cols-1 justify-items-center sm:grid-cols-2 lg:grid-cols-2 lg:justify-items-normal gap-8 mt-6  ">
         {filteredProjects.map((proj, index) => (
           <ProjectCard
             key={index}
@@ -133,18 +133,18 @@ const ProjectsPage: FC = () => {
     <>
       <ToastContainer position="top-center" />
       <div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold mt-4">Your Projects</h1>
           <button
             onClick={openModalHandler}
-            className="bg-[#af74d7] text-white rounded-xl w-[200px] h-[40px] py-2 px-4 cursor-pointer hover:bg-[#c885f5] flex items-center"
+            className="bg-[#af74d7] text-white rounded-xl py-2 px-4 cursor-pointer hover:bg-[#c885f5] flex items-center"
           >
             <Plus />
             Create New Projects
           </button>
         </div>
 
-        <div className="flex gap-4 mt-8">
+        <div className="grid grid-cols-1 justify-items-center sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
           <Card
             title="All Projects"
             value={projects.length}

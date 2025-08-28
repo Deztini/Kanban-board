@@ -11,7 +11,7 @@ const Tabs: FC<tabProps> = ({ tabName, onSelect, selectedType }) => {
           theme === "dark"
             ? "border-1 border-solid border-[#3E3A45]"
             : "border-1 border-solid border-[#ccc] "
-        } rounded-[8px] h-10 w-auto px-4 py-2  cursor-pointer  ${
+        } rounded-[8px] h-15 w-auto px-4 py-2 text-center  cursor-pointer  ${
           selectedType === tabName ? "bg-purple-500" : ""
         }`}
         onClick={onSelect}

@@ -8,10 +8,10 @@ const RootLayout: FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   return (
-    <div className="flex  min-h-screen">
+    <div className="flex min-h-screen">
       <div
         className={`${
-          theme === "dark" ? "bg-[#121212]" : ""
+          theme === "dark" ? "" : ""
         } root`}
       >
         <Sidebar />
